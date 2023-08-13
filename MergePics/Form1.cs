@@ -34,6 +34,9 @@ namespace MergePics
         private string _sourcePath;
         private string _outputPath;
         private string _dateTimeStringPrefix = "yyyy-MM-dd_HHmmss";
+        private string _gammaCorrectionSampleFile;
+        private int _gammaCorrectionSampleFileSize;
+
         public Form1()
         {
             InitializeComponent();
@@ -280,7 +283,7 @@ namespace MergePics
             CvInvoke.CvtColor(img1, img1_Gray, ColorConversion.Bgr2Gray);
             CvInvoke.CvtColor(img2, img2_Gray, ColorConversion.Bgr2Gray);
 
-            var orb = new ORBDetector(5000);
+            var orb = new ORB(5000);
 
             VectorOfKeyPoint k1 = new VectorOfKeyPoint();
             Mat d1 = new Mat();
@@ -354,6 +357,69 @@ namespace MergePics
             }
         }
 
+        private void btnSelectSample_Click(object sender, EventArgs e)
+        {
+            int size = -1;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                _gammaCorrectionSampleFile = openFileDialog1.FileName;
+                try
+                {
+                    string text = File.ReadAllText(_gammaCorrectionSampleFile);
+                    _gammaCorrectionSampleFileSize = text.Length;
+                    lbGammaCorrectionSample.Text = _gammaCorrectionSampleFile;
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
 
+        private void btnPreviewSampleArea_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_gammaCorrectionSampleFile) || _gammaCorrectionSampleFileSize < 1)
+            {
+                System.Windows.Forms.MessageBox.Show("Select a sample file first", "Message");
+                return;
+            }
+
+            if (!int.TryParse(tbSP1.Text, out int sp1) || !int.TryParse(tbSP2.Text, out int sp2) || !int.TryParse(tbSampleSize.Text, out int spSize))
+            {
+                System.Windows.Forms.MessageBox.Show("Select a sample file first", "Message");
+                return;
+            }
+
+            using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
+            {
+                var point1x = !string.IsNullOrWhiteSpace(tbSP1.Text) ? Convert.ToInt32(tbSP1.Text) : 0;
+                var point1y = !string.IsNullOrWhiteSpace(tbSP2.Text) ? Convert.ToInt32(tbSP2.Text) : 0;
+
+                Bgr bgr = new Bgr(0,0,255);
+                for (int x = point1x; x < point1x + 50; x++)
+                {
+                    for (int y = point1y; y < point1y + 50; y++)
+                    {
+                        sampleImg[x, y] = bgr;
+                    }
+                }
+
+                using (Form form = new Form())
+                {
+                    form.AutoScroll = true;
+                    form.AutoSize = false;
+                    form.StartPosition = FormStartPosition.CenterScreen;
+                    form.Size = new Size(1000,1000);
+
+                    PictureBox pb = new PictureBox();
+                    pb.Dock = DockStyle.Fill;
+                    pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
+                    pb.SizeMode = PictureBoxSizeMode.AutoSize;
+                    form.Controls.Add(pb);
+                    form.ShowDialog();
+                }
+            }
+        }
     }
 }

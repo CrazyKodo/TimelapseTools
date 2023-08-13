@@ -48,12 +48,19 @@
             this.tbSP1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbSP2 = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnSelectSample = new System.Windows.Forms.Button();
+            this.lbGammaCorrectionSample = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbSampleSize = new System.Windows.Forms.TextBox();
+            this.btnPreviewSampleArea = new System.Windows.Forms.Button();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSelectFolder
             // 
             this.btnSelectFolder.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSelectFolder.Location = new System.Drawing.Point(104, 94);
+            this.btnSelectFolder.Location = new System.Drawing.Point(12, 12);
             this.btnSelectFolder.Name = "btnSelectFolder";
             this.btnSelectFolder.Size = new System.Drawing.Size(136, 23);
             this.btnSelectFolder.TabIndex = 0;
@@ -65,7 +72,7 @@
             // 
             this.lableSourceFolderPath.AutoSize = true;
             this.lableSourceFolderPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lableSourceFolderPath.Location = new System.Drawing.Point(246, 99);
+            this.lableSourceFolderPath.Location = new System.Drawing.Point(154, 17);
             this.lableSourceFolderPath.Name = "lableSourceFolderPath";
             this.lableSourceFolderPath.Size = new System.Drawing.Size(10, 15);
             this.lableSourceFolderPath.TabIndex = 1;
@@ -75,7 +82,7 @@
             // 
             this.labelFileCount.AutoSize = true;
             this.labelFileCount.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFileCount.Location = new System.Drawing.Point(246, 130);
+            this.labelFileCount.Location = new System.Drawing.Point(154, 48);
             this.labelFileCount.Name = "labelFileCount";
             this.labelFileCount.Size = new System.Drawing.Size(76, 15);
             this.labelFileCount.TabIndex = 2;
@@ -84,7 +91,7 @@
             // btnRename
             // 
             this.btnRename.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRename.Location = new System.Drawing.Point(104, 194);
+            this.btnRename.Location = new System.Drawing.Point(12, 112);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(136, 23);
             this.btnRename.TabIndex = 3;
@@ -99,7 +106,7 @@
             this.cbFileNamePrefix.Items.AddRange(new object[] {
             "DateTime",
             "IntByName"});
-            this.cbFileNamePrefix.Location = new System.Drawing.Point(249, 191);
+            this.cbFileNamePrefix.Location = new System.Drawing.Point(157, 109);
             this.cbFileNamePrefix.Name = "cbFileNamePrefix";
             this.cbFileNamePrefix.Size = new System.Drawing.Size(121, 23);
             this.cbFileNamePrefix.TabIndex = 5;
@@ -107,7 +114,7 @@
             // btnOutputFolder
             // 
             this.btnOutputFolder.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOutputFolder.Location = new System.Drawing.Point(104, 165);
+            this.btnOutputFolder.Location = new System.Drawing.Point(12, 83);
             this.btnOutputFolder.Name = "btnOutputFolder";
             this.btnOutputFolder.Size = new System.Drawing.Size(136, 23);
             this.btnOutputFolder.TabIndex = 6;
@@ -119,7 +126,7 @@
             // 
             this.labelOutputfolderPath.AutoSize = true;
             this.labelOutputfolderPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelOutputfolderPath.Location = new System.Drawing.Point(246, 165);
+            this.labelOutputfolderPath.Location = new System.Drawing.Point(154, 83);
             this.labelOutputfolderPath.Name = "labelOutputfolderPath";
             this.labelOutputfolderPath.Size = new System.Drawing.Size(10, 15);
             this.labelOutputfolderPath.TabIndex = 7;
@@ -128,7 +135,7 @@
             // btnRotate
             // 
             this.btnRotate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRotate.Location = new System.Drawing.Point(104, 223);
+            this.btnRotate.Location = new System.Drawing.Point(12, 141);
             this.btnRotate.Name = "btnRotate";
             this.btnRotate.Size = new System.Drawing.Size(136, 23);
             this.btnRotate.TabIndex = 8;
@@ -139,7 +146,7 @@
             // btnGenerateMidFrame
             // 
             this.btnGenerateMidFrame.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGenerateMidFrame.Location = new System.Drawing.Point(104, 252);
+            this.btnGenerateMidFrame.Location = new System.Drawing.Point(12, 170);
             this.btnGenerateMidFrame.Name = "btnGenerateMidFrame";
             this.btnGenerateMidFrame.Size = new System.Drawing.Size(136, 23);
             this.btnGenerateMidFrame.TabIndex = 9;
@@ -150,7 +157,7 @@
             // btnAutoClick
             // 
             this.btnAutoClick.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAutoClick.Location = new System.Drawing.Point(104, 282);
+            this.btnAutoClick.Location = new System.Drawing.Point(12, 200);
             this.btnAutoClick.Name = "btnAutoClick";
             this.btnAutoClick.Size = new System.Drawing.Size(136, 23);
             this.btnAutoClick.TabIndex = 10;
@@ -161,7 +168,7 @@
             // tbAutoClickWait
             // 
             this.tbAutoClickWait.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAutoClickWait.Location = new System.Drawing.Point(316, 284);
+            this.tbAutoClickWait.Location = new System.Drawing.Point(224, 202);
             this.tbAutoClickWait.Name = "tbAutoClickWait";
             this.tbAutoClickWait.Size = new System.Drawing.Size(121, 23);
             this.tbAutoClickWait.TabIndex = 11;
@@ -171,7 +178,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(247, 287);
+            this.label1.Location = new System.Drawing.Point(155, 205);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 15);
             this.label1.TabIndex = 12;
@@ -181,7 +188,7 @@
             // 
             this.cbMidFrameReplace.AutoSize = true;
             this.cbMidFrameReplace.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbMidFrameReplace.Location = new System.Drawing.Point(249, 258);
+            this.cbMidFrameReplace.Location = new System.Drawing.Point(157, 176);
             this.cbMidFrameReplace.Name = "cbMidFrameReplace";
             this.cbMidFrameReplace.Size = new System.Drawing.Size(67, 19);
             this.cbMidFrameReplace.TabIndex = 13;
@@ -191,7 +198,7 @@
             // btnImageRegistration
             // 
             this.btnImageRegistration.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImageRegistration.Location = new System.Drawing.Point(104, 311);
+            this.btnImageRegistration.Location = new System.Drawing.Point(12, 229);
             this.btnImageRegistration.Name = "btnImageRegistration";
             this.btnImageRegistration.Size = new System.Drawing.Size(196, 23);
             this.btnImageRegistration.TabIndex = 14;
@@ -202,7 +209,7 @@
             // btnGammaCorrection
             // 
             this.btnGammaCorrection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGammaCorrection.Location = new System.Drawing.Point(104, 341);
+            this.btnGammaCorrection.Location = new System.Drawing.Point(7, 74);
             this.btnGammaCorrection.Name = "btnGammaCorrection";
             this.btnGammaCorrection.Size = new System.Drawing.Size(196, 23);
             this.btnGammaCorrection.TabIndex = 15;
@@ -212,9 +219,9 @@
             // 
             // tbSP1
             // 
-            this.tbSP1.Location = new System.Drawing.Point(389, 344);
+            this.tbSP1.Location = new System.Drawing.Point(142, 45);
             this.tbSP1.Name = "tbSP1";
-            this.tbSP1.Size = new System.Drawing.Size(59, 21);
+            this.tbSP1.Size = new System.Drawing.Size(59, 23);
             this.tbSP1.TabIndex = 16;
             this.tbSP1.Text = "1050";
             // 
@@ -222,7 +229,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(306, 346);
+            this.label2.Location = new System.Drawing.Point(59, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 15);
             this.label2.TabIndex = 17;
@@ -230,21 +237,83 @@
             // 
             // tbSP2
             // 
-            this.tbSP2.Location = new System.Drawing.Point(454, 343);
+            this.tbSP2.Location = new System.Drawing.Point(207, 45);
             this.tbSP2.Name = "tbSP2";
-            this.tbSP2.Size = new System.Drawing.Size(59, 21);
+            this.tbSP2.Size = new System.Drawing.Size(59, 23);
             this.tbSP2.TabIndex = 18;
             this.tbSP2.Text = "1180";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnPreviewSampleArea);
+            this.groupBox1.Controls.Add(this.tbSampleSize);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.lbGammaCorrectionSample);
+            this.groupBox1.Controls.Add(this.btnSelectSample);
+            this.groupBox1.Controls.Add(this.btnGammaCorrection);
+            this.groupBox1.Controls.Add(this.tbSP2);
+            this.groupBox1.Controls.Add(this.tbSP1);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(12, 258);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(747, 110);
+            this.groupBox1.TabIndex = 19;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Gamma correction";
+            // 
+            // btnSelectSample
+            // 
+            this.btnSelectSample.Location = new System.Drawing.Point(7, 22);
+            this.btnSelectSample.Name = "btnSelectSample";
+            this.btnSelectSample.Size = new System.Drawing.Size(129, 23);
+            this.btnSelectSample.TabIndex = 19;
+            this.btnSelectSample.Text = "Select sample image ";
+            this.btnSelectSample.UseVisualStyleBackColor = true;
+            this.btnSelectSample.Click += new System.EventHandler(this.btnSelectSample_Click);
+            // 
+            // lbGammaCorrectionSample
+            // 
+            this.lbGammaCorrectionSample.AutoSize = true;
+            this.lbGammaCorrectionSample.Location = new System.Drawing.Point(143, 26);
+            this.lbGammaCorrectionSample.Name = "lbGammaCorrectionSample";
+            this.lbGammaCorrectionSample.Size = new System.Drawing.Size(10, 15);
+            this.lbGammaCorrectionSample.TabIndex = 20;
+            this.lbGammaCorrectionSample.Text = ":";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(295, 48);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 15);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Sample size px";
+            // 
+            // tbSampleSize
+            // 
+            this.tbSampleSize.Location = new System.Drawing.Point(385, 45);
+            this.tbSampleSize.Name = "tbSampleSize";
+            this.tbSampleSize.Size = new System.Drawing.Size(100, 23);
+            this.tbSampleSize.TabIndex = 22;
+            this.tbSampleSize.Text = "50";
+            // 
+            // btnPreviewSampleArea
+            // 
+            this.btnPreviewSampleArea.Location = new System.Drawing.Point(511, 44);
+            this.btnPreviewSampleArea.Name = "btnPreviewSampleArea";
+            this.btnPreviewSampleArea.Size = new System.Drawing.Size(129, 23);
+            this.btnPreviewSampleArea.TabIndex = 23;
+            this.btnPreviewSampleArea.Text = "Preview sample area";
+            this.btnPreviewSampleArea.UseVisualStyleBackColor = true;
+            this.btnPreviewSampleArea.Click += new System.EventHandler(this.btnPreviewSampleArea_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.tbSP2);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.tbSP1);
-            this.Controls.Add(this.btnGammaCorrection);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnImageRegistration);
             this.Controls.Add(this.cbMidFrameReplace);
             this.Controls.Add(this.label1);
@@ -261,6 +330,8 @@
             this.Controls.Add(this.btnSelectFolder);
             this.Name = "Form1";
             this.Text = "TimeLapseTools";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -288,6 +359,12 @@
         private System.Windows.Forms.TextBox tbSP1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbSP2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lbGammaCorrectionSample;
+        private System.Windows.Forms.Button btnSelectSample;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnPreviewSampleArea;
+        private System.Windows.Forms.TextBox tbSampleSize;
     }
 }
 
