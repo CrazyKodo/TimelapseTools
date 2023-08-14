@@ -348,7 +348,7 @@ namespace MergePics
                 var sampleImgAvgBrightness = Helper.GetAverageBrightness(samples1.ToList());
                 var img2AvgBrightness = Helper.GetAverageBrightness(samples2.ToList());
 
-                if (img2AvgBrightness <sampleImgAvgBrightness)
+                if (img2AvgBrightness < sampleImgAvgBrightness)
                 {
                     img2._GammaCorrect(0.5d);
                 }
@@ -396,7 +396,7 @@ namespace MergePics
                 var point1x = !string.IsNullOrWhiteSpace(tbSP1.Text) ? Convert.ToInt32(tbSP1.Text) : 0;
                 var point1y = !string.IsNullOrWhiteSpace(tbSP2.Text) ? Convert.ToInt32(tbSP2.Text) : 0;
 
-                Bgr bgr = new Bgr(0,0,255);
+                Bgr bgr = new Bgr(0, 0, 255);
                 for (int x = point1x; x < point1x + 50; x++)
                 {
                     for (int y = point1y; y < point1y + 50; y++)
@@ -407,16 +407,21 @@ namespace MergePics
 
                 using (Form form = new Form())
                 {
-                    form.AutoScroll = true;
-                    form.AutoSize = false;
-                    form.StartPosition = FormStartPosition.CenterScreen;
-                    form.Size = new Size(1000,1000);
-
+                    Panel panel = new Panel();
                     PictureBox pb = new PictureBox();
-                    pb.Dock = DockStyle.Fill;
-                    pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
+                    panel.Controls.Add(pb);
+                    form.Controls.Add(panel);
+
+                    form.StartPosition = FormStartPosition.CenterScreen;
+                    form.AutoSize = true;
+                    panel.Size = new Size(1000, 1000);
+                    panel.AutoScroll = true;
+                    panel.Dock = DockStyle.Fill;
+
+
                     pb.SizeMode = PictureBoxSizeMode.AutoSize;
-                    form.Controls.Add(pb);
+                    pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
+
                     form.ShowDialog();
                 }
             }
