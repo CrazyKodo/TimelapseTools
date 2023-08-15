@@ -6,6 +6,7 @@ using Emgu.CV.Util;
 using Emgu.CV.XObjdetect;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -31,6 +32,8 @@ namespace MergePics
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
+        private const string _gammaCorrectionSampleFileSettingKey = "GammaCorrectionSampleFile";
         private string _sourcePath;
         private string _outputPath;
         private string _dateTimeStringPrefix = "yyyy-MM-dd_HHmmss";
@@ -42,6 +45,26 @@ namespace MergePics
             InitializeComponent();
             cbFileNamePrefix.SelectedIndex = 0;
             cbMidFrameReplace.CheckState = CheckState.Checked;
+
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_gammaCorrectionSampleFileSettingKey]))
+            {
+                try
+                {
+                    var path = ConfigurationManager.AppSettings[_gammaCorrectionSampleFileSettingKey];
+                    if (!string.IsNullOrWhiteSpace(path))
+                    {
+                        string text = File.ReadAllText(path);
+                        _gammaCorrectionSampleFile = path;
+                        _gammaCorrectionSampleFileSize = text.Length;
+                        lbGammaCorrectionSample.Text = _gammaCorrectionSampleFile;
+                    }
+                }
+                catch (Exception)
+                {
+                    _gammaCorrectionSampleFile = string.Empty;
+                    _gammaCorrectionSampleFileSize = 0;
+                }
+            }
         }
 
         public void DoMouseClick()
@@ -330,8 +353,8 @@ namespace MergePics
                 //var img1 = CvInvoke.Imread(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\4.jpeg", Emgu.CV.CvEnum.ImreadModes.AnyColor);
 
 
-                var point1x = !string.IsNullOrWhiteSpace(tbSP1.Text) ? Convert.ToInt32(tbSP1.Text) : 0;
-                var point1y = !string.IsNullOrWhiteSpace(tbSP2.Text) ? Convert.ToInt32(tbSP2.Text) : 0;
+                var point1x = !string.IsNullOrWhiteSpace(tbSP1y.Text) ? Convert.ToInt32(tbSP1y.Text) : 0;
+                var point1y = !string.IsNullOrWhiteSpace(tbSP1x.Text) ? Convert.ToInt32(tbSP1x.Text) : 0;
 
                 //Bgr bgr = new Bgr(0,0,255);
                 var samples1 = new List<Bgr>();
@@ -370,6 +393,11 @@ namespace MergePics
                     string text = File.ReadAllText(_gammaCorrectionSampleFile);
                     _gammaCorrectionSampleFileSize = text.Length;
                     lbGammaCorrectionSample.Text = _gammaCorrectionSampleFile;
+
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                    AppSettingsSection app = config.AppSettings;
+                    app.Settings[_gammaCorrectionSampleFileSettingKey].Value = _gammaCorrectionSampleFile;
+                    config.Save(ConfigurationSaveMode.Modified);
                 }
                 catch (IOException)
                 {
@@ -385,23 +413,34 @@ namespace MergePics
                 return;
             }
 
-            if (!int.TryParse(tbSP1.Text, out int sp1) || !int.TryParse(tbSP2.Text, out int sp2) || !int.TryParse(tbSampleSize.Text, out int spSize))
+            if (!int.TryParse(tbSP1y.Text, out int sp1y) || !int.TryParse(tbSP1x.Text, out int sp1x) || !int.TryParse(tbSampleSize.Text, out int spSize))
             {
-                System.Windows.Forms.MessageBox.Show("Select a sample file first", "Message");
+                System.Windows.Forms.MessageBox.Show("Set sample point first", "Message");
                 return;
             }
 
             using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
             {
-                var point1x = !string.IsNullOrWhiteSpace(tbSP1.Text) ? Convert.ToInt32(tbSP1.Text) : 0;
-                var point1y = !string.IsNullOrWhiteSpace(tbSP2.Text) ? Convert.ToInt32(tbSP2.Text) : 0;
-
-                Bgr bgr = new Bgr(0, 0, 255);
-                for (int x = point1x; x < point1x + 50; x++)
+                for (int x = sp1x; x < sp1x + spSize; x++)
                 {
-                    for (int y = point1y; y < point1y + 50; y++)
+                    for (int y = sp1y; y < sp1y + spSize; y++)
                     {
-                        sampleImg[x, y] = bgr;
+                        var currentBGR = sampleImg[y, x];
+                        var halfBGR = new Bgr(currentBGR.Blue / 3, currentBGR.Green / 3, currentBGR.Red + 255 / 2);
+                        sampleImg[y, x] = halfBGR;
+                    }
+                }
+
+                if (int.TryParse(tbSP2y.Text, out int sp2y) && int.TryParse(tbSP2x.Text, out int sp2x))
+                {
+                    for (int x = sp2x; x < sp2x + spSize; x++)
+                    {
+                        for (int y = sp2y; y < sp2y + spSize; y++)
+                        {
+                            var currentBGR = sampleImg[y, x];
+                            var halfBGR = new Bgr(currentBGR.Blue + 255 / 2, currentBGR.Green / 3, currentBGR.Red / 3);
+                            sampleImg[y, x] = halfBGR;
+                        }
                     }
                 }
 

@@ -45,15 +45,24 @@
             this.cbMidFrameReplace = new System.Windows.Forms.CheckBox();
             this.btnImageRegistration = new System.Windows.Forms.Button();
             this.btnGammaCorrection = new System.Windows.Forms.Button();
-            this.tbSP1 = new System.Windows.Forms.TextBox();
+            this.tbSP1y = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.tbSP2 = new System.Windows.Forms.TextBox();
+            this.tbSP1x = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnSelectSample = new System.Windows.Forms.Button();
-            this.lbGammaCorrectionSample = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbSampleSize = new System.Windows.Forms.TextBox();
             this.btnPreviewSampleArea = new System.Windows.Forms.Button();
+            this.tbSampleSize = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbGammaCorrectionSample = new System.Windows.Forms.Label();
+            this.btnSelectSample = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tbSP2y = new System.Windows.Forms.TextBox();
+            this.tbSP2x = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.tbThreshold = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -209,7 +218,7 @@
             // btnGammaCorrection
             // 
             this.btnGammaCorrection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGammaCorrection.Location = new System.Drawing.Point(7, 74);
+            this.btnGammaCorrection.Location = new System.Drawing.Point(6, 143);
             this.btnGammaCorrection.Name = "btnGammaCorrection";
             this.btnGammaCorrection.Size = new System.Drawing.Size(196, 23);
             this.btnGammaCorrection.TabIndex = 15;
@@ -217,13 +226,13 @@
             this.btnGammaCorrection.UseVisualStyleBackColor = true;
             this.btnGammaCorrection.Click += new System.EventHandler(this.btnGammaCorrection_Click);
             // 
-            // tbSP1
+            // tbSP1y
             // 
-            this.tbSP1.Location = new System.Drawing.Point(142, 45);
-            this.tbSP1.Name = "tbSP1";
-            this.tbSP1.Size = new System.Drawing.Size(59, 23);
-            this.tbSP1.TabIndex = 16;
-            this.tbSP1.Text = "1050";
+            this.tbSP1y.Location = new System.Drawing.Point(252, 45);
+            this.tbSP1y.Name = "tbSP1y";
+            this.tbSP1y.Size = new System.Drawing.Size(50, 23);
+            this.tbSP1y.TabIndex = 16;
+            this.tbSP1y.Text = "1080";
             // 
             // label2
             // 
@@ -231,36 +240,81 @@
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(59, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 15);
+            this.label2.Size = new System.Drawing.Size(86, 15);
             this.label2.TabIndex = 17;
-            this.label2.Text = "Sample point";
+            this.label2.Text = "Sample point 1";
             // 
-            // tbSP2
+            // tbSP1x
             // 
-            this.tbSP2.Location = new System.Drawing.Point(207, 45);
-            this.tbSP2.Name = "tbSP2";
-            this.tbSP2.Size = new System.Drawing.Size(59, 23);
-            this.tbSP2.TabIndex = 18;
-            this.tbSP2.Text = "1180";
+            this.tbSP1x.Location = new System.Drawing.Point(165, 45);
+            this.tbSP1x.Name = "tbSP1x";
+            this.tbSP1x.Size = new System.Drawing.Size(50, 23);
+            this.tbSP1x.TabIndex = 18;
+            this.tbSP1x.Text = "1030";
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.btnPreviewSampleArea);
+            this.groupBox1.Controls.Add(this.tbThreshold);
             this.groupBox1.Controls.Add(this.tbSampleSize);
+            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.lbGammaCorrectionSample);
             this.groupBox1.Controls.Add(this.btnSelectSample);
             this.groupBox1.Controls.Add(this.btnGammaCorrection);
-            this.groupBox1.Controls.Add(this.tbSP2);
-            this.groupBox1.Controls.Add(this.tbSP1);
+            this.groupBox1.Controls.Add(this.tbSP2x);
+            this.groupBox1.Controls.Add(this.tbSP1x);
+            this.groupBox1.Controls.Add(this.tbSP2y);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.tbSP1y);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(12, 258);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(747, 110);
+            this.groupBox1.Size = new System.Drawing.Size(765, 172);
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Gamma correction";
+            // 
+            // btnPreviewSampleArea
+            // 
+            this.btnPreviewSampleArea.Location = new System.Drawing.Point(6, 114);
+            this.btnPreviewSampleArea.Name = "btnPreviewSampleArea";
+            this.btnPreviewSampleArea.Size = new System.Drawing.Size(129, 23);
+            this.btnPreviewSampleArea.TabIndex = 23;
+            this.btnPreviewSampleArea.Text = "Preview sample area";
+            this.btnPreviewSampleArea.UseVisualStyleBackColor = true;
+            this.btnPreviewSampleArea.Click += new System.EventHandler(this.btnPreviewSampleArea_Click);
+            // 
+            // tbSampleSize
+            // 
+            this.tbSampleSize.Location = new System.Drawing.Point(413, 45);
+            this.tbSampleSize.Name = "tbSampleSize";
+            this.tbSampleSize.Size = new System.Drawing.Size(100, 23);
+            this.tbSampleSize.TabIndex = 22;
+            this.tbSampleSize.Text = "50";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(323, 48);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 15);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Sample size px";
+            // 
+            // lbGammaCorrectionSample
+            // 
+            this.lbGammaCorrectionSample.AutoSize = true;
+            this.lbGammaCorrectionSample.Location = new System.Drawing.Point(143, 26);
+            this.lbGammaCorrectionSample.Name = "lbGammaCorrectionSample";
+            this.lbGammaCorrectionSample.Size = new System.Drawing.Size(10, 15);
+            this.lbGammaCorrectionSample.TabIndex = 20;
+            this.lbGammaCorrectionSample.Text = ":";
             // 
             // btnSelectSample
             // 
@@ -272,41 +326,84 @@
             this.btnSelectSample.UseVisualStyleBackColor = true;
             this.btnSelectSample.Click += new System.EventHandler(this.btnSelectSample_Click);
             // 
-            // lbGammaCorrectionSample
+            // label4
             // 
-            this.lbGammaCorrectionSample.AutoSize = true;
-            this.lbGammaCorrectionSample.Location = new System.Drawing.Point(143, 26);
-            this.lbGammaCorrectionSample.Name = "lbGammaCorrectionSample";
-            this.lbGammaCorrectionSample.Size = new System.Drawing.Size(10, 15);
-            this.lbGammaCorrectionSample.TabIndex = 20;
-            this.lbGammaCorrectionSample.Text = ":";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(230, 48);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(16, 15);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "y:";
             // 
-            // label3
+            // label5
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(295, 48);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 15);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Sample size px";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(142, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(16, 15);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "x:";
             // 
-            // tbSampleSize
+            // label6
             // 
-            this.tbSampleSize.Location = new System.Drawing.Point(385, 45);
-            this.tbSampleSize.Name = "tbSampleSize";
-            this.tbSampleSize.Size = new System.Drawing.Size(100, 23);
-            this.tbSampleSize.TabIndex = 22;
-            this.tbSampleSize.Text = "50";
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(59, 77);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(86, 15);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Sample point 2";
             // 
-            // btnPreviewSampleArea
+            // tbSP2y
             // 
-            this.btnPreviewSampleArea.Location = new System.Drawing.Point(511, 44);
-            this.btnPreviewSampleArea.Name = "btnPreviewSampleArea";
-            this.btnPreviewSampleArea.Size = new System.Drawing.Size(129, 23);
-            this.btnPreviewSampleArea.TabIndex = 23;
-            this.btnPreviewSampleArea.Text = "Preview sample area";
-            this.btnPreviewSampleArea.UseVisualStyleBackColor = true;
-            this.btnPreviewSampleArea.Click += new System.EventHandler(this.btnPreviewSampleArea_Click);
+            this.tbSP2y.Location = new System.Drawing.Point(252, 74);
+            this.tbSP2y.Name = "tbSP2y";
+            this.tbSP2y.Size = new System.Drawing.Size(50, 23);
+            this.tbSP2y.TabIndex = 16;
+            this.tbSP2y.Text = "1210";
+            // 
+            // tbSP2x
+            // 
+            this.tbSP2x.Location = new System.Drawing.Point(165, 74);
+            this.tbSP2x.Name = "tbSP2x";
+            this.tbSP2x.Size = new System.Drawing.Size(50, 23);
+            this.tbSP2x.TabIndex = 18;
+            this.tbSP2x.Text = "1600";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(230, 77);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(16, 15);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "y:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(142, 77);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(16, 15);
+            this.label8.TabIndex = 24;
+            this.label8.Text = "x:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(323, 77);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(59, 15);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "Threshold";
+            // 
+            // tbThreshold
+            // 
+            this.tbThreshold.Location = new System.Drawing.Point(413, 74);
+            this.tbThreshold.Name = "tbThreshold";
+            this.tbThreshold.Size = new System.Drawing.Size(100, 23);
+            this.tbThreshold.TabIndex = 22;
+            this.tbThreshold.Text = "50";
             // 
             // Form1
             // 
@@ -356,15 +453,24 @@
         private System.Windows.Forms.CheckBox cbMidFrameReplace;
         private System.Windows.Forms.Button btnImageRegistration;
         private System.Windows.Forms.Button btnGammaCorrection;
-        private System.Windows.Forms.TextBox tbSP1;
+        private System.Windows.Forms.TextBox tbSP1y;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbSP2;
+        private System.Windows.Forms.TextBox tbSP1x;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lbGammaCorrectionSample;
         private System.Windows.Forms.Button btnSelectSample;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnPreviewSampleArea;
         private System.Windows.Forms.TextBox tbSampleSize;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tbThreshold;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tbSP2x;
+        private System.Windows.Forms.TextBox tbSP2y;
+        private System.Windows.Forms.Label label6;
     }
 }
 
