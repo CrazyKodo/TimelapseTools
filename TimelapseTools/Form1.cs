@@ -346,37 +346,53 @@ namespace MergePics
 
         private void btnGammaCorrection_Click(object sender, EventArgs e)
         {
-
-            using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\4.jpeg"))
-            using (Image<Bgr, Byte> img2 = new Image<Bgr, Byte>(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\5.jpeg"))
+            if (string.IsNullOrWhiteSpace(_gammaCorrectionSampleFile) || _gammaCorrectionSampleFileSize < 1)
             {
-                //var img1 = CvInvoke.Imread(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\4.jpeg", Emgu.CV.CvEnum.ImreadModes.AnyColor);
+                System.Windows.Forms.MessageBox.Show("Select a sample file", "Message");
+                return;
+            }
+
+            if (!int.TryParse(tbSP1y.Text, out int sp1y) || !int.TryParse(tbSP1x.Text, out int sp1x))
+            {
+                System.Windows.Forms.MessageBox.Show("Set at leaset one sample point", "Message");
+                return;
+            }
+
+            if (!int.TryParse(tbSampleSize.Text, out int spSize))
+            {
+                System.Windows.Forms.MessageBox.Show("Set the sample size", "Message");
+                return;
+            }
+
+            if (!int.TryParse(tbThreshold.Text, out int threshold))
+            {
+                System.Windows.Forms.MessageBox.Show("Set the threshold", "Message");
+                return;
+            }
 
 
-                var point1x = !string.IsNullOrWhiteSpace(tbSP1y.Text) ? Convert.ToInt32(tbSP1y.Text) : 0;
-                var point1y = !string.IsNullOrWhiteSpace(tbSP1x.Text) ? Convert.ToInt32(tbSP1x.Text) : 0;
+            using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
+            using (Image<Bgr, Byte> img = new Image<Bgr, Byte>(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\2.Horizontal\Temp\a1.jpeg"))
+            {
+                double diff = threshold;
+                var sampleImgAvgBrightnessSP1 = Helper.GetAverageBrightness(sampleImg, sp1x, sp1y, spSize);
 
-                //Bgr bgr = new Bgr(0,0,255);
-                var samples1 = new List<Bgr>();
-                var samples2 = new List<Bgr>();
-                for (int x = point1x; x < point1x + 50; x++)
+                while (diff >= threshold)
                 {
-                    for (int y = point1y; y < point1y + 50; y++)
+                    var imgAvgBrightness = Helper.GetAverageBrightness(img, sp1x, sp1y, spSize);
+
+                    diff = Math.Abs(sampleImgAvgBrightnessSP1 - imgAvgBrightness);
+
+                    if (sampleImgAvgBrightnessSP1 < imgAvgBrightness)
                     {
-                        samples1.Add(sampleImg[x, y]);
-                        samples2.Add(img2[x, y]);
+                        img._GammaCorrect(1.1d);
+                    }
+                    else
+                    {
+                        img._GammaCorrect(0.9d);
                     }
                 }
-
-                var sampleImgAvgBrightness = Helper.GetAverageBrightness(samples1.ToList());
-                var img2AvgBrightness = Helper.GetAverageBrightness(samples2.ToList());
-
-                if (img2AvgBrightness < sampleImgAvgBrightness)
-                {
-                    img2._GammaCorrect(0.5d);
-                }
-
-                CvInvoke.Imwrite(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\output.jpg", img2);
+                CvInvoke.Imwrite(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\2.Horizontal\Temp\output.jpg", img);
             }
         }
 
@@ -409,13 +425,19 @@ namespace MergePics
         {
             if (string.IsNullOrWhiteSpace(_gammaCorrectionSampleFile) || _gammaCorrectionSampleFileSize < 1)
             {
-                System.Windows.Forms.MessageBox.Show("Select a sample file first", "Message");
+                System.Windows.Forms.MessageBox.Show("Select a sample file", "Message");
                 return;
             }
 
-            if (!int.TryParse(tbSP1y.Text, out int sp1y) || !int.TryParse(tbSP1x.Text, out int sp1x) || !int.TryParse(tbSampleSize.Text, out int spSize))
+            if (!int.TryParse(tbSP1y.Text, out int sp1y) || !int.TryParse(tbSP1x.Text, out int sp1x))
             {
-                System.Windows.Forms.MessageBox.Show("Set sample point first", "Message");
+                System.Windows.Forms.MessageBox.Show("Set at leaset one sample point", "Message");
+                return;
+            }
+
+            if (!int.TryParse(tbSampleSize.Text, out int spSize))
+            {
+                System.Windows.Forms.MessageBox.Show("Set the sample size", "Message");
                 return;
             }
 

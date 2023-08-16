@@ -1,8 +1,10 @@
-﻿using Emgu.CV.Structure;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +28,23 @@ namespace MergePics
             }
 
             return sumBrightness / count;
+        }
+
+        public static double GetAverageBrightness(Image<Bgr, Byte> image, int pointX, int pointY, int size)
+        {
+            var samples = new List<Bgr>();
+
+            for (int x = pointX; x < pointX + size; x++)
+            {
+                for (int y = pointY; y < pointY + size; y++)
+                {
+                    samples.Add(image[y, x]);
+                }
+            }
+
+            var sampleImgAvgBrightness = GetAverageBrightness(samples.ToList());
+
+            return sampleImgAvgBrightness;
         }
     }
 }

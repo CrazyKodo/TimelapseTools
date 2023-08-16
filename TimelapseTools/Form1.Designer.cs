@@ -49,20 +49,20 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tbSP1x = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.btnPreviewSampleArea = new System.Windows.Forms.Button();
+            this.tbThreshold = new System.Windows.Forms.TextBox();
             this.tbSampleSize = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lbGammaCorrectionSample = new System.Windows.Forms.Label();
             this.btnSelectSample = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.tbSP2y = new System.Windows.Forms.TextBox();
             this.tbSP2x = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.tbThreshold = new System.Windows.Forms.TextBox();
+            this.tbSP2y = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -280,6 +280,42 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Gamma correction";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(142, 77);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(16, 15);
+            this.label8.TabIndex = 24;
+            this.label8.Text = "x:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(142, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(16, 15);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "x:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(230, 77);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(16, 15);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "y:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(230, 48);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(16, 15);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "y:";
+            // 
             // btnPreviewSampleArea
             // 
             this.btnPreviewSampleArea.Location = new System.Drawing.Point(6, 114);
@@ -290,6 +326,14 @@
             this.btnPreviewSampleArea.UseVisualStyleBackColor = true;
             this.btnPreviewSampleArea.Click += new System.EventHandler(this.btnPreviewSampleArea_Click);
             // 
+            // tbThreshold
+            // 
+            this.tbThreshold.Location = new System.Drawing.Point(413, 74);
+            this.tbThreshold.Name = "tbThreshold";
+            this.tbThreshold.Size = new System.Drawing.Size(100, 23);
+            this.tbThreshold.TabIndex = 22;
+            this.tbThreshold.Text = "10";
+            // 
             // tbSampleSize
             // 
             this.tbSampleSize.Location = new System.Drawing.Point(413, 45);
@@ -297,6 +341,15 @@
             this.tbSampleSize.Size = new System.Drawing.Size(100, 23);
             this.tbSampleSize.TabIndex = 22;
             this.tbSampleSize.Text = "50";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(323, 77);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(59, 15);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "Threshold";
             // 
             // label3
             // 
@@ -326,23 +379,21 @@
             this.btnSelectSample.UseVisualStyleBackColor = true;
             this.btnSelectSample.Click += new System.EventHandler(this.btnSelectSample_Click);
             // 
-            // label4
+            // tbSP2x
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(230, 48);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(16, 15);
-            this.label4.TabIndex = 24;
-            this.label4.Text = "y:";
+            this.tbSP2x.Location = new System.Drawing.Point(165, 74);
+            this.tbSP2x.Name = "tbSP2x";
+            this.tbSP2x.Size = new System.Drawing.Size(50, 23);
+            this.tbSP2x.TabIndex = 18;
+            this.tbSP2x.Text = "1600";
             // 
-            // label5
+            // tbSP2y
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(142, 48);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(16, 15);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "x:";
+            this.tbSP2y.Location = new System.Drawing.Point(252, 74);
+            this.tbSP2y.Name = "tbSP2y";
+            this.tbSP2y.Size = new System.Drawing.Size(50, 23);
+            this.tbSP2y.TabIndex = 16;
+            this.tbSP2y.Text = "1210";
             // 
             // label6
             // 
@@ -353,57 +404,6 @@
             this.label6.Size = new System.Drawing.Size(86, 15);
             this.label6.TabIndex = 17;
             this.label6.Text = "Sample point 2";
-            // 
-            // tbSP2y
-            // 
-            this.tbSP2y.Location = new System.Drawing.Point(252, 74);
-            this.tbSP2y.Name = "tbSP2y";
-            this.tbSP2y.Size = new System.Drawing.Size(50, 23);
-            this.tbSP2y.TabIndex = 16;
-            this.tbSP2y.Text = "1210";
-            // 
-            // tbSP2x
-            // 
-            this.tbSP2x.Location = new System.Drawing.Point(165, 74);
-            this.tbSP2x.Name = "tbSP2x";
-            this.tbSP2x.Size = new System.Drawing.Size(50, 23);
-            this.tbSP2x.TabIndex = 18;
-            this.tbSP2x.Text = "1600";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(230, 77);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(16, 15);
-            this.label7.TabIndex = 24;
-            this.label7.Text = "y:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(142, 77);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(16, 15);
-            this.label8.TabIndex = 24;
-            this.label8.Text = "x:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(323, 77);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 15);
-            this.label9.TabIndex = 21;
-            this.label9.Text = "Threshold";
-            // 
-            // tbThreshold
-            // 
-            this.tbThreshold.Location = new System.Drawing.Point(413, 74);
-            this.tbThreshold.Name = "tbThreshold";
-            this.tbThreshold.Size = new System.Drawing.Size(100, 23);
-            this.tbThreshold.TabIndex = 22;
-            this.tbThreshold.Text = "50";
             // 
             // Form1
             // 
