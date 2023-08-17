@@ -34,6 +34,9 @@ namespace MergePics
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
         private const string _gammaCorrectionSampleFileSettingKey = "GammaCorrectionSampleFile";
+        private const string _sourcePathSettingKey = "SourcePath";
+        private const string _outputPathSettingKey = "OutputPath";
+
         private string _sourcePath;
         private string _outputPath;
         private string _dateTimeStringPrefix = "yyyy-MM-dd_HHmmss";
@@ -65,6 +68,20 @@ namespace MergePics
                     _gammaCorrectionSampleFileSize = 0;
                 }
             }
+
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_sourcePathSettingKey]))
+            {
+                _sourcePath = ConfigurationManager.AppSettings[_sourcePathSettingKey];
+                string[] files = Directory.GetFiles(_sourcePath);
+                this.lableSourceFolderPath.Text = $": {_sourcePath}";
+                this.labelFileCount.Text = $"File count: {files.Length.ToString()}.";
+            }
+
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_outputPathSettingKey]))
+            {
+                _outputPath = ConfigurationManager.AppSettings[_outputPathSettingKey];
+                this.labelOutputfolderPath.Text = $": {_outputPath}";
+            }
         }
 
         public void DoMouseClick()
@@ -85,6 +102,9 @@ namespace MergePics
                 _sourcePath = folderBrowserDialog1.SelectedPath;
                 string[] files = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
                 this.labelFileCount.Text = $"File count: {files.Length.ToString()}.";
+
+
+                Helper.SaveAppSettings(_sourcePathSettingKey, _sourcePath);
                 return;
             }
 
@@ -100,6 +120,8 @@ namespace MergePics
             {
                 this.labelOutputfolderPath.Text = $": {fBDOutput.SelectedPath}";
                 _outputPath = fBDOutput.SelectedPath;
+
+                Helper.SaveAppSettings(_outputPathSettingKey, _outputPath);
                 return;
             }
 
@@ -370,30 +392,40 @@ namespace MergePics
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(_sourcePath) || string.IsNullOrWhiteSpace(_outputPath))
+            {
+                System.Windows.Forms.MessageBox.Show("Select the source/output folders first", "Message");
+                return;
+            }
+
+            DirectoryInfo d = new DirectoryInfo(_sourcePath);
+            FileInfo[] infos = d.GetFiles();
 
             using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
-            using (Image<Bgr, Byte> img = new Image<Bgr, Byte>(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\2.Horizontal\Temp\a1.jpeg"))
             {
-                double diff = threshold;
-                var sampleImgAvgBrightnessSP1 = Helper.GetAverageBrightness(sampleImg, sp1x, sp1y, spSize);
-
-                while (diff >= threshold)
+                Parallel.For(0, infos.Length - 1, i =>
                 {
-                    var imgAvgBrightness = Helper.GetAverageBrightness(img, sp1x, sp1y, spSize);
-
-                    diff = Math.Abs(sampleImgAvgBrightnessSP1 - imgAvgBrightness);
-
-                    if (sampleImgAvgBrightnessSP1 < imgAvgBrightness)
+                    using (Image<Bgr, Byte> img = new Image<Bgr, Byte>(infos[i].FullName))
                     {
-                        img._GammaCorrect(1.1d);
+                        var extension = Path.GetExtension(infos[i].FullName);
+                        var fileFullName = $"{_outputPath}\\{infos[i].Name.Replace(extension, "")}_GC{extension}";
+                        try
+                        {
+                            var sp2x = int.TryParse(tbSP2x.Text, out int re) ? (int?)re : null;
+                            var sp2y = int.TryParse(tbSP2y.Text, out int re1) ? (int?)re1 : null;
+                            var result = Helper.GammaCorrect(sampleImg, img, threshold, spSize, sp1x, sp1y, sp2x, sp2y);
+                            result.Save(fileFullName);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Windows.Forms.MessageBox.Show(ex.Message, "Message");
+                        }
+
                     }
-                    else
-                    {
-                        img._GammaCorrect(0.9d);
-                    }
-                }
-                CvInvoke.Imwrite(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\2.Horizontal\Temp\output.jpg", img);
+                });
             }
+
+            System.Windows.Forms.MessageBox.Show("Done", "Message");
         }
 
         private void btnSelectSample_Click(object sender, EventArgs e)
@@ -410,10 +442,7 @@ namespace MergePics
                     _gammaCorrectionSampleFileSize = text.Length;
                     lbGammaCorrectionSample.Text = _gammaCorrectionSampleFile;
 
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                    AppSettingsSection app = config.AppSettings;
-                    app.Settings[_gammaCorrectionSampleFileSettingKey].Value = _gammaCorrectionSampleFile;
-                    config.Save(ConfigurationSaveMode.Modified);
+                    Helper.SaveAppSettings(_gammaCorrectionSampleFileSettingKey, _gammaCorrectionSampleFile);
                 }
                 catch (IOException)
                 {

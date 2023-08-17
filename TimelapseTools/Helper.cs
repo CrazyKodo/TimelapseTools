@@ -2,6 +2,7 @@
 using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -45,6 +46,49 @@ namespace MergePics
             var sampleImgAvgBrightness = GetAverageBrightness(samples.ToList());
 
             return sampleImgAvgBrightness;
+        }
+
+        public static Image<Bgr, Byte> GammaCorrect(Image<Bgr, Byte> sample, Image<Bgr, Byte> image, int threshold, int size, int sp1x, int sp1y, int? sp2x, int? sp2y)
+        {
+            double diff = threshold;
+            var sampleImgAvgBrightnessSP1 = Helper.GetAverageBrightness(sample, sp1x, sp1y, size);
+
+            while (diff >= threshold)
+            {
+                var imgAvgBrightness = Helper.GetAverageBrightness(image, sp1x, sp1y, size);
+                diff = Math.Abs(sampleImgAvgBrightnessSP1 - imgAvgBrightness);
+
+                if (sp2x.HasValue && sp2y.HasValue)
+                {
+                    imgAvgBrightness = (Helper.GetAverageBrightness(image, sp2x.Value, sp2y.Value, size) + imgAvgBrightness) / 2;
+                    diff = Math.Abs(sampleImgAvgBrightnessSP1 - imgAvgBrightness);
+                }
+
+                if (sampleImgAvgBrightnessSP1 < imgAvgBrightness)
+                {
+                    image._GammaCorrect(1.1d);
+                }
+                else
+                {
+                    image._GammaCorrect(0.9d);
+                }
+            }
+
+            return image;
+        }
+
+        public static void SaveAppSettings(string key, string value)
+        {
+            try
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                AppSettingsSection app = config.AppSettings;
+                app.Settings[key].Value = value;
+                config.Save(ConfigurationSaveMode.Modified);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

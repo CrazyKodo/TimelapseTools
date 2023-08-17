@@ -393,7 +393,7 @@
             this.tbSP2y.Name = "tbSP2y";
             this.tbSP2y.Size = new System.Drawing.Size(50, 23);
             this.tbSP2y.TabIndex = 16;
-            this.tbSP2y.Text = "1210";
+            this.tbSP2y.Text = "1215";
             // 
             // label6
             // 
