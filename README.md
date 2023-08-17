@@ -1,6 +1,6 @@
 # TimelapseTools
 Current working functions
 
-Bulk Rotate
-Bulk Rename
-Bulk Gamma correction (by two sample areas)
+Bulk Rotate<br />
+Bulk Rename<br />
+Bulk Gamma correction (by two sample areas)<br />
