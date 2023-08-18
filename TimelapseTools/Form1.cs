@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -498,6 +499,8 @@ namespace MergePics
                 using (Form form = new Form())
                 {
                     Panel panel = new Panel();
+                    var lbMousePosition = new System.Windows.Forms.Label();
+                    panel.Controls.Add(lbMousePosition);
                     PictureBox pb = new PictureBox();
                     panel.Controls.Add(pb);
                     form.Controls.Add(panel);
@@ -507,7 +510,14 @@ namespace MergePics
                     panel.Size = new Size(1000, 1000);
                     panel.AutoScroll = true;
                     panel.Dock = DockStyle.Fill;
-
+                    pb.MouseMove += (object mmsender, MouseEventArgs ee) =>
+                    {
+                        var posPB = pb.PointToClient(Cursor.Position);
+                        var posPanel = panel.PointToClient(Cursor.Position);
+                        lbMousePosition.Text = posPB.X + ":" + posPB.Y;
+                        lbMousePosition.Top = posPanel.Y;
+                        lbMousePosition.Left = posPanel.X + 10;
+                    };
 
                     pb.SizeMode = PictureBoxSizeMode.AutoSize;
                     pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
