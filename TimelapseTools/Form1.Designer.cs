@@ -113,7 +113,8 @@
             this.cbFileNamePrefix.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbFileNamePrefix.FormattingEnabled = true;
             this.cbFileNamePrefix.Items.AddRange(new object[] {
-            "DateTime",
+            "ExactDateTime",
+            "DateTimeWithFileName",
             "IntByName"});
             this.cbFileNamePrefix.Location = new System.Drawing.Point(157, 109);
             this.cbFileNamePrefix.Name = "cbFileNamePrefix";

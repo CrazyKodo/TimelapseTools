@@ -138,7 +138,23 @@ namespace MergePics
                 return;
             }
 
-            if (cbFileNamePrefix.SelectedItem == "DateTime")
+            if (cbFileNamePrefix.SelectedItem == "ExactDateTime")
+            {
+                DirectoryInfo d = new DirectoryInfo(_sourcePath);
+                FileInfo[] infos = d.GetFiles();
+                foreach (FileInfo f in infos)
+                {
+                    var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
+                    var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}{f.Extension}";
+                    if (!File.Exists(fileFullName))
+                    {
+                        System.IO.File.Copy(f.FullName, fileFullName);
+                    }
+                }
+                System.Windows.Forms.MessageBox.Show("Done", "Message");
+            }
+
+            if (cbFileNamePrefix.SelectedItem == "DateTimeWithFileName")
             {
                 DirectoryInfo d = new DirectoryInfo(_sourcePath);
                 FileInfo[] infos = d.GetFiles();
@@ -146,8 +162,10 @@ namespace MergePics
                 {
                     var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
                     var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}_{f.Name}";
-
-                    System.IO.File.Copy(f.FullName, fileFullName);
+                    if (!File.Exists(fileFullName))
+                    {
+                        System.IO.File.Copy(f.FullName, fileFullName);
+                    }
                 }
                 System.Windows.Forms.MessageBox.Show("Done", "Message");
             }
