@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -88,6 +89,21 @@ namespace MergePics
             }
             catch (Exception)
             {
+            }
+        }
+
+        public static void TryCopy(string sourceFileName, string destFileName, bool replace)
+        {
+            if (!File.Exists(destFileName))
+            {
+                System.IO.File.Copy(sourceFileName, destFileName);
+                return;
+            }
+
+            if (replace)
+            {
+                System.IO.File.Copy(sourceFileName, destFileName, true);
+                return;
             }
         }
     }

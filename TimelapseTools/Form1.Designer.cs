@@ -63,6 +63,7 @@
             this.tbSP2x = new System.Windows.Forms.TextBox();
             this.tbSP2y = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.cbRenameReplace = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -406,6 +407,17 @@
             this.label6.TabIndex = 17;
             this.label6.Text = "Sample point 2";
             // 
+            // cbRenameReplace
+            // 
+            this.cbRenameReplace.AutoSize = true;
+            this.cbRenameReplace.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbRenameReplace.Location = new System.Drawing.Point(284, 111);
+            this.cbRenameReplace.Name = "cbRenameReplace";
+            this.cbRenameReplace.Size = new System.Drawing.Size(67, 19);
+            this.cbRenameReplace.TabIndex = 13;
+            this.cbRenameReplace.Text = "Replace";
+            this.cbRenameReplace.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -413,6 +425,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnImageRegistration);
+            this.Controls.Add(this.cbRenameReplace);
             this.Controls.Add(this.cbMidFrameReplace);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbAutoClickWait);
@@ -472,6 +485,7 @@
         private System.Windows.Forms.TextBox tbSP2x;
         private System.Windows.Forms.TextBox tbSP2y;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox cbRenameReplace;
     }
 }
 

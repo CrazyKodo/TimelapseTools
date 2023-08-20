@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace MergePics
@@ -146,12 +147,8 @@ namespace MergePics
                 {
                     var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
                     var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}{f.Extension}";
-                    if (!File.Exists(fileFullName))
-                    {
-                        System.IO.File.Copy(f.FullName, fileFullName);
-                    }
+                    Helper.TryCopy(f.FullName, fileFullName, cbRenameReplace.Checked);
                 }
-                System.Windows.Forms.MessageBox.Show("Done", "Message");
             }
 
             if (cbFileNamePrefix.SelectedItem == "DateTimeWithFileName")
@@ -162,12 +159,8 @@ namespace MergePics
                 {
                     var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
                     var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}_{f.Name}";
-                    if (!File.Exists(fileFullName))
-                    {
-                        System.IO.File.Copy(f.FullName, fileFullName);
-                    }
+                    Helper.TryCopy(f.FullName, fileFullName, cbRenameReplace.Checked);
                 }
-                System.Windows.Forms.MessageBox.Show("Done", "Message");
             }
 
             if (cbFileNamePrefix.SelectedItem == "IntByName")
@@ -180,12 +173,11 @@ namespace MergePics
                 {
                     var extension = Path.GetExtension(sortedInfo[si].FullName);
                     var fileFullName = $"{_outputPath}\\{(si + 1).ToString().PadLeft(5, '0')}{extension}";
-
-                    System.IO.File.Copy(sortedInfo[si].FullName, fileFullName);
+                    Helper.TryCopy(sortedInfo[si].FullName, fileFullName, cbRenameReplace.Checked);
                 }
-                System.Windows.Forms.MessageBox.Show("Done", "Message");
             }
 
+            System.Windows.Forms.MessageBox.Show("Done", "Message");
         }
 
         private void btnRotate_Click(object sender, EventArgs e)
