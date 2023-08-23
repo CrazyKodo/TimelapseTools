@@ -329,54 +329,6 @@ namespace MergePics
             }
         }
 
-        private void btnImageRegistration_Click(object sender, EventArgs e)
-        {
-            var img1 = CvInvoke.Imread(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\1.jpg", Emgu.CV.CvEnum.ImreadModes.AnyColor);
-            var img2 = CvInvoke.Imread(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\2.jpg", Emgu.CV.CvEnum.ImreadModes.AnyColor);
-
-            Mat img1_Gray = new Mat();
-            Mat img2_Gray = new Mat();
-            CvInvoke.CvtColor(img1, img1_Gray, ColorConversion.Bgr2Gray);
-            CvInvoke.CvtColor(img2, img2_Gray, ColorConversion.Bgr2Gray);
-
-            var orb = new ORB(5000);
-
-            VectorOfKeyPoint k1 = new VectorOfKeyPoint();
-            Mat d1 = new Mat();
-            orb.DetectAndCompute(img1_Gray, null, k1, d1, false);
-
-
-            VectorOfKeyPoint k2 = new VectorOfKeyPoint();
-            IOutputArray d2 = new Mat();
-            orb.DetectAndCompute(img2_Gray, null, k2, d2, false);
-
-            var matcher = new BFMatcher(DistanceType.Hamming, true);
-
-            VectorOfDMatch matches = new VectorOfDMatch();
-            matcher.Match(d1, d2, matches);
-
-            var sorted = matches.ToArray().OrderBy(x => x.Distance).Take(Convert.ToInt32(matches.Size * 0.9)).ToList();
-
-            var p1 = new List<PointF>();
-            var p2 = new List<PointF>();
-            foreach (var pair in sorted)
-            {
-                p1.Add(k1[pair.QueryIdx].Point);
-                p2.Add(k2[pair.TrainIdx].Point);
-            }
-            p1.Reverse();
-            p2.Reverse();
-
-            var homography = CvInvoke.FindHomography(p1.ToArray(), p2.ToArray(), Emgu.CV.CvEnum.RobustEstimationAlgorithm.Ransac);
-
-            IOutputArray result = new Mat();
-            Size size = new Size(img1.Width, img1.Height);
-            CvInvoke.WarpPerspective((IInputArray)img1, result, (IInputArray)homography, size);
-
-            CvInvoke.Imwrite(@"C:\CrazyKodo\VideoProject\Fig tree\Raw\Horizontal\Temp\output.jpg", result);
-
-        }
-
         private void btnGammaCorrection_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(_gammaCorrectionSampleFile) || _gammaCorrectionSampleFileSize < 1)

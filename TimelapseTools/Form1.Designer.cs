@@ -43,7 +43,6 @@
             this.tbAutoClickWait = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbMidFrameReplace = new System.Windows.Forms.CheckBox();
-            this.btnImageRegistration = new System.Windows.Forms.Button();
             this.btnGammaCorrection = new System.Windows.Forms.Button();
             this.tbSP1y = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -117,7 +116,7 @@
             "ExactDateTime",
             "DateTimeWithFileName",
             "IntByName"});
-            this.cbFileNamePrefix.Location = new System.Drawing.Point(157, 109);
+            this.cbFileNamePrefix.Location = new System.Drawing.Point(157, 113);
             this.cbFileNamePrefix.Name = "cbFileNamePrefix";
             this.cbFileNamePrefix.Size = new System.Drawing.Size(121, 23);
             this.cbFileNamePrefix.TabIndex = 5;
@@ -205,17 +204,6 @@
             this.cbMidFrameReplace.TabIndex = 13;
             this.cbMidFrameReplace.Text = "Replace";
             this.cbMidFrameReplace.UseVisualStyleBackColor = true;
-            // 
-            // btnImageRegistration
-            // 
-            this.btnImageRegistration.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnImageRegistration.Location = new System.Drawing.Point(12, 229);
-            this.btnImageRegistration.Name = "btnImageRegistration";
-            this.btnImageRegistration.Size = new System.Drawing.Size(196, 23);
-            this.btnImageRegistration.TabIndex = 14;
-            this.btnImageRegistration.Text = "(Not work)Image registration";
-            this.btnImageRegistration.UseVisualStyleBackColor = true;
-            this.btnImageRegistration.Click += new System.EventHandler(this.btnImageRegistration_Click);
             // 
             // btnGammaCorrection
             // 
@@ -411,7 +399,7 @@
             // 
             this.cbRenameReplace.AutoSize = true;
             this.cbRenameReplace.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbRenameReplace.Location = new System.Drawing.Point(284, 111);
+            this.cbRenameReplace.Location = new System.Drawing.Point(284, 115);
             this.cbRenameReplace.Name = "cbRenameReplace";
             this.cbRenameReplace.Size = new System.Drawing.Size(67, 19);
             this.cbRenameReplace.TabIndex = 13;
@@ -424,7 +412,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btnImageRegistration);
             this.Controls.Add(this.cbRenameReplace);
             this.Controls.Add(this.cbMidFrameReplace);
             this.Controls.Add(this.label1);
@@ -465,7 +452,6 @@
         private System.Windows.Forms.TextBox tbAutoClickWait;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbMidFrameReplace;
-        private System.Windows.Forms.Button btnImageRegistration;
         private System.Windows.Forms.Button btnGammaCorrection;
         private System.Windows.Forms.TextBox tbSP1y;
         private System.Windows.Forms.Label label2;
