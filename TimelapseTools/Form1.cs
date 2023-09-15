@@ -51,6 +51,10 @@ namespace MergePics
             cbFileNamePrefix.SelectedIndex = 0;
             cbMidFrameReplace.CheckState = CheckState.Checked;
 
+            var rotateOptions = Enum.GetNames(typeof(RotateFlipType));
+            cbRotateOptions.DataSource = rotateOptions;
+            cbRotateOptions.SelectedIndex = Array.FindIndex(rotateOptions, x => x == "Rotate90FlipNone"); 
+
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_gammaCorrectionSampleFileSettingKey]))
             {
                 try
@@ -188,6 +192,12 @@ namespace MergePics
                 return;
             }
 
+            RotateFlipType options;
+            if (!Enum.TryParse(cbRotateOptions.SelectedValue.ToString(), out options))
+            {
+                options = RotateFlipType.Rotate90FlipNone;
+            } 
+
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
             ImageCodecInfo jgpEncoder = codecs.First(x => x.FormatID == ImageFormat.Jpeg.Guid);
@@ -204,7 +214,7 @@ namespace MergePics
                 using (Image img = Image.FromFile(f.FullName))
                 {
                     //rotate the picture by 90 degrees and re-save the picture as a Jpeg
-                    img.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    img.RotateFlip(options);
                     img.Save(fileFullName, jgpEncoder, myEncoderParameters);
                 }
             }

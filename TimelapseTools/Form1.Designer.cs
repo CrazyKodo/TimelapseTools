@@ -63,6 +63,7 @@
             this.tbSP2y = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.cbRenameReplace = new System.Windows.Forms.CheckBox();
+            this.cbRotateOptions = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -406,11 +407,20 @@
             this.cbRenameReplace.Text = "Replace";
             this.cbRenameReplace.UseVisualStyleBackColor = true;
             // 
+            // cbRotateOptions
+            // 
+            this.cbRotateOptions.FormattingEnabled = true;
+            this.cbRotateOptions.Location = new System.Drawing.Point(158, 144);
+            this.cbRotateOptions.Name = "cbRotateOptions";
+            this.cbRotateOptions.Size = new System.Drawing.Size(187, 20);
+            this.cbRotateOptions.TabIndex = 20;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.cbRotateOptions);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbRenameReplace);
             this.Controls.Add(this.cbMidFrameReplace);
@@ -472,6 +482,7 @@
         private System.Windows.Forms.TextBox tbSP2y;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.CheckBox cbRenameReplace;
+        private System.Windows.Forms.ComboBox cbRotateOptions;
     }
 }
 
