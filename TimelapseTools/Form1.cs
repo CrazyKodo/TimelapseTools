@@ -6,6 +6,7 @@ using Emgu.CV.Util;
 using Emgu.CV.XObjdetect;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -45,15 +46,18 @@ namespace MergePics
         private string _gammaCorrectionSampleFile;
         private int _gammaCorrectionSampleFileSize;
 
+        private ProgressForm _progressForm;
+
         public Form1()
         {
             InitializeComponent();
+
             cbFileNamePrefix.SelectedIndex = 0;
             cbMidFrameReplace.CheckState = CheckState.Checked;
 
             var rotateOptions = Enum.GetNames(typeof(RotateFlipType));
             cbRotateOptions.DataSource = rotateOptions;
-            cbRotateOptions.SelectedIndex = Array.FindIndex(rotateOptions, x => x == "Rotate90FlipNone"); 
+            cbRotateOptions.SelectedIndex = Array.FindIndex(rotateOptions, x => x == "Rotate90FlipNone");
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_gammaCorrectionSampleFileSettingKey]))
             {
@@ -139,47 +143,56 @@ namespace MergePics
         {
             if (string.IsNullOrWhiteSpace(_sourcePath) || string.IsNullOrWhiteSpace(_outputPath))
             {
-                System.Windows.Forms.MessageBox.Show("Select a folder first", "Message");
+                System.Windows.Forms.MessageBox.Show("Select the source and output folders first", "Message");
                 return;
             }
 
-            if (cbFileNamePrefix.SelectedItem == "ExactDateTime")
+            if (_progressForm == null)
             {
-                DirectoryInfo d = new DirectoryInfo(_sourcePath);
-                FileInfo[] infos = d.GetFiles();
-                foreach (FileInfo f in infos)
-                {
-                    var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
-                    var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}{f.Extension}";
-                    Helper.TryCopy(f.FullName, fileFullName, cbRenameReplace.Checked);
-                }
+                // Start the asynchronous operation.                
+                _progressForm = new ProgressForm();
+                _progressForm.DoWork("asd");
+                _progressForm.ShowDialog();
             }
 
-            if (cbFileNamePrefix.SelectedItem == "DateTimeWithFileName")
-            {
-                DirectoryInfo d = new DirectoryInfo(_sourcePath);
-                FileInfo[] infos = d.GetFiles();
-                foreach (FileInfo f in infos)
-                {
-                    var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
-                    var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}_{f.Name}";
-                    Helper.TryCopy(f.FullName, fileFullName, cbRenameReplace.Checked);
-                }
-            }
 
-            if (cbFileNamePrefix.SelectedItem == "IntByName")
-            {
-                DirectoryInfo d = new DirectoryInfo(_sourcePath);
-                FileInfo[] infos = d.GetFiles();
-                var sortedInfo = infos.OrderBy(x => x.Name).ToList();
+            //if (cbFileNamePrefix.SelectedItem == "ExactDateTime")
+            //{
+            //    DirectoryInfo d = new DirectoryInfo(_sourcePath);
+            //    FileInfo[] infos = d.GetFiles();
+            //    foreach (FileInfo f in infos)
+            //    {
+            //        var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
+            //        var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}{f.Extension}";
+            //        Helper.TryCopy(f.FullName, fileFullName, cbRenameReplace.Checked);
+            //    }
+            //}
 
-                for (int si = 0; si < sortedInfo.Count; si++)
-                {
-                    var extension = Path.GetExtension(sortedInfo[si].FullName);
-                    var fileFullName = $"{_outputPath}\\{(si + 1).ToString().PadLeft(5, '0')}{extension}";
-                    Helper.TryCopy(sortedInfo[si].FullName, fileFullName, cbRenameReplace.Checked);
-                }
-            }
+            //if (cbFileNamePrefix.SelectedItem == "DateTimeWithFileName")
+            //{
+            //    DirectoryInfo d = new DirectoryInfo(_sourcePath);
+            //    FileInfo[] infos = d.GetFiles();
+            //    foreach (FileInfo f in infos)
+            //    {
+            //        var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
+            //        var fileFullName = $"{_outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}_{f.Name}";
+            //        Helper.TryCopy(f.FullName, fileFullName, cbRenameReplace.Checked);
+            //    }
+            //}
+
+            //if (cbFileNamePrefix.SelectedItem == "IntByName")
+            //{
+            //    DirectoryInfo d = new DirectoryInfo(_sourcePath);
+            //    FileInfo[] infos = d.GetFiles();
+            //    var sortedInfo = infos.OrderBy(x => x.Name).ToList();
+
+            //    for (int si = 0; si < sortedInfo.Count; si++)
+            //    {
+            //        var extension = Path.GetExtension(sortedInfo[si].FullName);
+            //        var fileFullName = $"{_outputPath}\\{(si + 1).ToString().PadLeft(5, '0')}{extension}";
+            //        Helper.TryCopy(sortedInfo[si].FullName, fileFullName, cbRenameReplace.Checked);
+            //    }
+            //}
 
             System.Windows.Forms.MessageBox.Show("Done", "Message");
         }
@@ -196,7 +209,7 @@ namespace MergePics
             if (!Enum.TryParse(cbRotateOptions.SelectedValue.ToString(), out options))
             {
                 options = RotateFlipType.Rotate90FlipNone;
-            } 
+            }
 
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
