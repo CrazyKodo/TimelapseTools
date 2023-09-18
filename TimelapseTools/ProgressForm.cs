@@ -60,6 +60,7 @@ namespace MergePics
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             label1.Text = (e.ProgressPercentage.ToString() + "%");
+            progressBar1.Value= e.ProgressPercentage; 
         }
 
         // This event handler deals with the results of the background operation.
@@ -76,6 +77,7 @@ namespace MergePics
             else
             {
                 label1.Text = "Done!";
+                this.Dispose();
             }
         }
     }

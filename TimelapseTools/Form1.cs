@@ -152,10 +152,18 @@ namespace MergePics
                 // Start the asynchronous operation.                
                 _progressForm = new ProgressForm();
                 _progressForm.DoWork("asd");
+                _progressForm.StartPosition = FormStartPosition.CenterParent;
                 _progressForm.ShowDialog();
             }
 
+            var result = RenameHelper.Rename();
+            if (result.Success)
+            {
+                System.Windows.Forms.MessageBox.Show("Done", "Message");
+                return;
+            }
 
+            MessageBox.Show(result.Error, "Error");
             //if (cbFileNamePrefix.SelectedItem == "ExactDateTime")
             //{
             //    DirectoryInfo d = new DirectoryInfo(_sourcePath);
@@ -194,7 +202,6 @@ namespace MergePics
             //    }
             //}
 
-            System.Windows.Forms.MessageBox.Show("Done", "Message");
         }
 
         private void btnRotate_Click(object sender, EventArgs e)
