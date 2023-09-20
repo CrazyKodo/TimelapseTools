@@ -42,7 +42,6 @@ namespace MergePics
 
         private string _sourcePath;
         private string _outputPath;
-        private string _dateTimeStringPrefix = "yyyy-MM-dd_HHmmss";
         private string _gammaCorrectionSampleFile;
         private int _gammaCorrectionSampleFileSize;
 
@@ -151,11 +150,12 @@ namespace MergePics
             {
                 // Start the asynchronous operation.                
                 _progressForm = new ProgressForm();
-                _progressForm.DoWork("asd");
+                _progressForm.Rename(RenameType renameType, string sourcePath, string outputPath, bool replace);
                 _progressForm.StartPosition = FormStartPosition.CenterParent;
                 _progressForm.ShowDialog();
             }
 
+            var 
             var result = RenameHelper.Rename();
             if (result.Success)
             {
@@ -286,27 +286,6 @@ namespace MergePics
             });
 
             System.Windows.Forms.MessageBox.Show("Done", "Message");
-        }
-
-        private DateTime TryGetDateTimeTakenFromExif(FileInfo fileInfo)
-        {
-            using (Image image = Image.FromFile(fileInfo.FullName))
-            {
-                if (!image.PropertyIdList.Any(x => x == 36867))
-                {
-                    return fileInfo.CreationTime;
-                }
-                PropertyItem propItem = image.GetPropertyItem(36867);
-                string dateTaken = Encoding.UTF8.GetString(propItem.Value);
-                string sdate = Encoding.UTF8.GetString(propItem.Value).Trim();
-                string secondhalf = sdate.Substring(sdate.IndexOf(" "), (sdate.Length - sdate.IndexOf(" ")));
-                string firsthalf = sdate.Substring(0, 10);
-                firsthalf = firsthalf.Replace(":", "-");
-                sdate = firsthalf + secondhalf;
-                var dtaken = DateTime.Parse(sdate);
-
-                return dtaken;
-            }
         }
 
         private Bitmap MergeImage(Bitmap image1, Bitmap image2, Bitmap bitmap)

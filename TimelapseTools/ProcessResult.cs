@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MergePics
 {
-    internal class ProcessResult
+    public class ProcessResult
     {
         public string Error;
         public bool Success;
