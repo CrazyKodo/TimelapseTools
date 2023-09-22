@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -12,36 +13,52 @@ namespace MergePics
     public class RenameHelper
     {
         private static string _dateTimeStringPrefix = "yyyy-MM-dd_HHmmss";
-        public static ProcessResult Rename(RenameType renameType, string sourcePath, string outputPath, bool replace)
+        public static ProcessResult Rename(RenameType renameType, string sourcePath, string outputPath, bool replace, BackgroundWorker backgroundWorker1)
         {
             if (renameType == RenameType.ExactDateTime)
             {
                 DirectoryInfo d = new DirectoryInfo(sourcePath);
                 FileInfo[] infos = d.GetFiles();
-                foreach (FileInfo f in infos)
+
+                var totalItems = infos.Length;
+                var processed = 0m;
+
+                Parallel.For(0, infos.Length, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
                 {
+                    var f = infos[i];
                     var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
                     var fileFullName = $"{outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}{f.Extension}";
                     Helper.TryCopy(f.FullName, fileFullName, replace);
-                }
+                    processed++;
+                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems)));
+                });
             }
 
-            if (renameType == RenameType.ExactDateTime)
+            if (renameType == RenameType.DateTimeWithFileName)
             {
                 DirectoryInfo d = new DirectoryInfo(sourcePath);
                 FileInfo[] infos = d.GetFiles();
-                foreach (FileInfo f in infos)
+
+                var totalItems = infos.Length;
+                var processed = 0m;
+
+                Parallel.For(0, infos.Length, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
                 {
+                    var f = infos[i];
                     var photoTakenDateTime = TryGetDateTimeTakenFromExif(f);
                     var fileFullName = $"{outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}_{f.Name}";
                     Helper.TryCopy(f.FullName, fileFullName, replace);
-                }
+                    processed++;
+                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems)));
+                }); 
             }
 
-            if (renameType == RenameType.ExactDateTime)
+            if (renameType == RenameType.IntByName)
             {
                 DirectoryInfo d = new DirectoryInfo(sourcePath);
                 FileInfo[] infos = d.GetFiles();
+                var totalItems = infos.Length;
+                var processed = 0m;
                 var sortedInfo = infos.OrderBy(x => x.Name).ToList();
 
                 for (int si = 0; si < sortedInfo.Count; si++)
@@ -49,6 +66,8 @@ namespace MergePics
                     var extension = Path.GetExtension(sortedInfo[si].FullName);
                     var fileFullName = $"{outputPath}\\{(si + 1).ToString().PadLeft(5, '0')}{extension}";
                     Helper.TryCopy(sortedInfo[si].FullName, fileFullName, replace);
+                    processed++;
+                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems)));
                 }
             }
             return new ProcessResult() { };

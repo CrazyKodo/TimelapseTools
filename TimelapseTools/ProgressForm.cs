@@ -23,42 +23,19 @@ namespace MergePics
             BackgroundWorker backgroundWorker1 = new BackgroundWorker();
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
-            backgroundWorker1.DoWork += (obj, e) => DoWork(obj, e, renameType, sourcePath, outputPath, replace);
             backgroundWorker1.ProgressChanged += (obj, e) => backgroundWorker1_ProgressChanged(obj, e);
             backgroundWorker1.RunWorkerCompleted += (obj, e) => backgroundWorker1_RunWorkerCompleted(obj, e);
+            backgroundWorker1.DoWork += (obj, e) => DoWork(obj, e, renameType, sourcePath, outputPath, replace, backgroundWorker1);
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private void cancelAsyncButton_Click(object sender, EventArgs e)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            if (worker.WorkerSupportsCancellation == true)
-            {
-                // Cancel the asynchronous operation.
-                worker.CancelAsync();
-            }
-        }
-
         // This event handler is where the time-consuming work is done.
-        private void DoWork(object sender, DoWorkEventArgs e, RenameType renameType, string sourcePath, string outputPath, bool replace)
+        private void DoWork(object sender, DoWorkEventArgs e, RenameType renameType, string sourcePath, string outputPath, bool replace, BackgroundWorker backgroundWorker1)
         {
 
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            for (int i = 1; i <= 10; i++)
-            {
-                if (worker.CancellationPending == true)
-                {
-                    e.Cancel = true;
-                    break;
-                }
-                else
-                {
-                    // Perform a time consuming operation and report progress.
-                    System.Threading.Thread.Sleep(500);
-                    worker.ReportProgress(i * 10);
-                }
-            }
+            RenameHelper.Rename(renameType, sourcePath, outputPath, replace, worker);
         }
 
         // This event handler updates the progress.
@@ -83,6 +60,16 @@ namespace MergePics
             {
                 label1.Text = "Done!";
                 this.Dispose();
+            }
+        }
+
+        private void btnCancelProcess_Click(object sender, EventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            if (worker.WorkerSupportsCancellation == true)
+            {
+                // Cancel the asynchronous operation.
+                worker.CancelAsync();
             }
         }
     }

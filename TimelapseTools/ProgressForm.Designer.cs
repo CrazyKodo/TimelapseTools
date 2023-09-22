@@ -57,6 +57,7 @@
             this.btnCancelProcess.TabIndex = 2;
             this.btnCancelProcess.Text = "Cancel";
             this.btnCancelProcess.UseVisualStyleBackColor = true;
+            this.btnCancelProcess.Click += new System.EventHandler(this.btnCancelProcess_Click);
             // 
             // ProgressForm
             // 
