@@ -38,6 +38,14 @@ namespace MergePics
         private const string _gammaCorrectionSampleFileSettingKey = "GammaCorrectionSampleFile";
         private const string _sourcePathSettingKey = "SourcePath";
         private const string _outputPathSettingKey = "OutputPath";
+        private const string _samplePoint1XSettingKey = "SP1x";
+        private const string _samplePoint1YSettingKey = "SP1y";
+        private const string _samplePoint2XSettingKey = "SP2x";
+        private const string _samplePoint2YSettingKey = "SP2y";
+        private const string _samplePoint3XSettingKey = "SP3x";
+        private const string _samplePoint3YSettingKey = "SP3y";
+        private const string _samplePoint4XSettingKey = "SP4x";
+        private const string _samplePoint4YSettingKey = "SP4y";
 
         private string _sourcePath;
         private string _outputPath;
@@ -87,6 +95,30 @@ namespace MergePics
             {
                 _outputPath = ConfigurationManager.AppSettings[_outputPathSettingKey];
                 this.labelOutputfolderPath.Text = $": {_outputPath}";
+            }
+
+            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint1XSettingKey], out int xPoint1) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint1YSettingKey], out int yPoint1))
+            {
+                this.tbSP1x.Text = xPoint1.ToString();
+                this.tbSP1y.Text = yPoint1.ToString();
+            }
+
+            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint2XSettingKey], out int xPoint2) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint2YSettingKey], out int yPoint2))
+            {
+                this.tbSP2x.Text = xPoint2.ToString();
+                this.tbSP2y.Text = yPoint2.ToString();
+            }
+
+            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint3XSettingKey], out int xPoint3) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint3YSettingKey], out int yPoint3))
+            {
+                this.tbSP3x.Text = xPoint3.ToString();
+                this.tbSP3y.Text = yPoint3.ToString();
+            }
+
+            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint4XSettingKey], out int xPoint4) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint4YSettingKey], out int yPoint4))
+            {
+                this.tbSP4x.Text = xPoint4.ToString();
+                this.tbSP4y.Text = yPoint4.ToString();
             }
         }
 
@@ -347,7 +379,7 @@ namespace MergePics
                 return;
             }
 
-            if (!int.TryParse(tbSP1y.Text, out int sp1y) || !int.TryParse(tbSP1x.Text, out int sp1x))
+            if (!int.TryParse(tbSP1y.Text, out int _) || !int.TryParse(tbSP1x.Text, out int _))
             {
                 System.Windows.Forms.MessageBox.Show("Set at leaset one sample point", "Message");
                 return;
@@ -371,12 +403,30 @@ namespace MergePics
                 return;
             }
 
+            List<Point> points = new List<Point>();
+            if (int.TryParse(tbSP1y.Text, out int sp1y) && int.TryParse(tbSP1x.Text, out int sp1x))
+            {
+                points.Add(new Point(sp1x, sp1y));
+            }
+            if (int.TryParse(tbSP2y.Text, out int sp2y) && int.TryParse(tbSP2x.Text, out int sp2x))
+            {
+                points.Add(new Point(sp2x, sp2y));
+            }
+            if (int.TryParse(tbSP3y.Text, out int sp3y) && int.TryParse(tbSP3x.Text, out int sp3x))
+            {
+                points.Add(new Point(sp3x, sp3y));
+            }
+            if (int.TryParse(tbSP4y.Text, out int sp4y) && int.TryParse(tbSP4x.Text, out int sp4x))
+            {
+                points.Add(new Point(sp4x, sp4y));
+            }
+
             DirectoryInfo d = new DirectoryInfo(_sourcePath);
             FileInfo[] infos = d.GetFiles();
 
             using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
             {
-                Parallel.For(0, infos.Length - 1, i =>
+                Parallel.For(0, infos.Length, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
                 {
                     using (Image<Bgr, Byte> img = new Image<Bgr, Byte>(infos[i].FullName))
                     {
@@ -384,9 +434,7 @@ namespace MergePics
                         var fileFullName = $"{_outputPath}\\{infos[i].Name.Replace(extension, "")}_GC{extension}";
                         try
                         {
-                            var sp2x = int.TryParse(tbSP2x.Text, out int re) ? (int?)re : null;
-                            var sp2y = int.TryParse(tbSP2y.Text, out int re1) ? (int?)re1 : null;
-                            var result = Helper.GammaCorrect(sampleImg, img, threshold, spSize, sp1x, sp1y, sp2x, sp2y);
+                            var result = Helper.GammaCorrect(sampleImg, img, threshold, spSize, points);
                             result.Save(fileFullName);
                         }
                         catch (Exception ex)
@@ -468,6 +516,32 @@ namespace MergePics
                     }
                 }
 
+                if (int.TryParse(tbSP3y.Text, out int sp3y) && int.TryParse(tbSP3x.Text, out int sp3x))
+                {
+                    for (int x = sp3x; x < sp3x + spSize; x++)
+                    {
+                        for (int y = sp3y; y < sp3y + spSize; y++)
+                        {
+                            var currentBGR = sampleImg[y, x];
+                            var halfBGR = new Bgr(currentBGR.Blue + 255 / 2, currentBGR.Green / 3, currentBGR.Red / 3);
+                            sampleImg[y, x] = halfBGR;
+                        }
+                    }
+                }
+
+                if (int.TryParse(tbSP4y.Text, out int sp4y) && int.TryParse(tbSP4x.Text, out int sp4x))
+                {
+                    for (int x = sp4x; x < sp4x + spSize; x++)
+                    {
+                        for (int y = sp4y; y < sp4y + spSize; y++)
+                        {
+                            var currentBGR = sampleImg[y, x];
+                            var halfBGR = new Bgr(currentBGR.Blue + 255 / 2, currentBGR.Green / 3, currentBGR.Red / 3);
+                            sampleImg[y, x] = halfBGR;
+                        }
+                    }
+                }
+
                 using (Form form = new Form())
                 {
                     Panel panel = new Panel();
@@ -496,6 +570,70 @@ namespace MergePics
 
                     form.ShowDialog();
                 }
+            }
+        }
+
+        private void tbSP1x_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP1x.Text,out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint1XSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP1y_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP1y.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint1YSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP2x_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP2x.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint2XSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP2y_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP2y.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint2YSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP3x_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP3x.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint3XSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP3y_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP3y.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint3YSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP4x_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP4x.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint4XSettingKey, re.ToString());
+            }
+        }
+
+        private void tbSP4y_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(tbSP4y.Text, out int re))
+            {
+                Helper.SaveAppSettings(_samplePoint4YSettingKey, re.ToString());
             }
         }
     }

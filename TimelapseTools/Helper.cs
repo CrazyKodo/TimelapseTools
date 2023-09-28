@@ -49,23 +49,29 @@ namespace MergePics
             return sampleImgAvgBrightness;
         }
 
-        public static Image<Bgr, Byte> GammaCorrect(Image<Bgr, Byte> sample, Image<Bgr, Byte> image, int threshold, int size, int sp1x, int sp1y, int? sp2x, int? sp2y)
+        public static double GetImageAverageBrightness(Image<Bgr, Byte> image, int size, List<Point> points)
         {
-            double diff = threshold;
-            var sampleImgAvgBrightnessSP1 = Helper.GetAverageBrightness(sample, sp1x, sp1y, size);
+            if (!points.Any())
+            {
+                return 0d;
+            }
+
+            var total = 0d;
+
+            points.ForEach(p=> total+= GetAverageBrightness(image, p.X, p.Y, size) );
+
+            return total/points.Count;
+        }
+
+        public static Image<Bgr, Byte> GammaCorrect(Image<Bgr, Byte> sample, Image<Bgr, Byte> image, int threshold, int size, List<Point> points)
+        {
+            var sampleImgAvgBrightness = GetImageAverageBrightness(sample, size, points);
+            var imgAvgBrightness = GetImageAverageBrightness(image, size, points);
+            var diff = Math.Abs(sampleImgAvgBrightness - imgAvgBrightness);
 
             while (diff >= threshold)
             {
-                var imgAvgBrightness = Helper.GetAverageBrightness(image, sp1x, sp1y, size);
-                diff = Math.Abs(sampleImgAvgBrightnessSP1 - imgAvgBrightness);
-
-                if (sp2x.HasValue && sp2y.HasValue)
-                {
-                    imgAvgBrightness = (Helper.GetAverageBrightness(image, sp2x.Value, sp2y.Value, size) + imgAvgBrightness) / 2;
-                    diff = Math.Abs(sampleImgAvgBrightnessSP1 - imgAvgBrightness);
-                }
-
-                if (sampleImgAvgBrightnessSP1 < imgAvgBrightness)
+                if (sampleImgAvgBrightness < imgAvgBrightness)
                 {
                     image._GammaCorrect(1.1d);
                 }
@@ -73,6 +79,8 @@ namespace MergePics
                 {
                     image._GammaCorrect(0.9d);
                 }
+                imgAvgBrightness = GetImageAverageBrightness(image, size, points);
+                diff = Math.Abs(sampleImgAvgBrightness - imgAvgBrightness);
             }
 
             return image;
