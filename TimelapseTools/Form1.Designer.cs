@@ -48,6 +48,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tbSP1x = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tbSP4x = new System.Windows.Forms.TextBox();
+            this.tbSP3x = new System.Windows.Forms.TextBox();
+            this.tbSP4y = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.tbSP3y = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -64,16 +74,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cbRenameReplace = new System.Windows.Forms.CheckBox();
             this.cbRotateOptions = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.tbSP4x = new System.Windows.Forms.TextBox();
-            this.tbSP3x = new System.Windows.Forms.TextBox();
-            this.tbSP4y = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.tbSP3y = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -219,7 +219,7 @@
             // btnGammaCorrection
             // 
             this.btnGammaCorrection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGammaCorrection.Location = new System.Drawing.Point(146, 140);
+            this.btnGammaCorrection.Location = new System.Drawing.Point(188, 140);
             this.btnGammaCorrection.Name = "btnGammaCorrection";
             this.btnGammaCorrection.Size = new System.Drawing.Size(196, 23);
             this.btnGammaCorrection.TabIndex = 15;
@@ -233,7 +233,7 @@
             this.tbSP1y.Name = "tbSP1y";
             this.tbSP1y.Size = new System.Drawing.Size(50, 23);
             this.tbSP1y.TabIndex = 16;
-            this.tbSP1y.Text = "1080";
+            this.tbSP1y.Text = "1060";
             this.tbSP1y.TextChanged += new System.EventHandler(this.tbSP1y_TextChanged);
             // 
             // label2
@@ -252,7 +252,7 @@
             this.tbSP1x.Name = "tbSP1x";
             this.tbSP1x.Size = new System.Drawing.Size(50, 23);
             this.tbSP1x.TabIndex = 18;
-            this.tbSP1x.Text = "1030";
+            this.tbSP1x.Text = "1145";
             this.tbSP1x.TextChanged += new System.EventHandler(this.tbSP1x_TextChanged);
             // 
             // groupBox1
@@ -292,152 +292,6 @@
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Gamma correction";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(397, 76);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(16, 15);
-            this.label8.TabIndex = 24;
-            this.label8.Text = "x:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(139, 76);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(16, 15);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "x:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(479, 76);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(16, 15);
-            this.label7.TabIndex = 24;
-            this.label7.Text = "y:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(217, 76);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(16, 15);
-            this.label4.TabIndex = 24;
-            this.label4.Text = "y:";
-            // 
-            // btnPreviewSampleArea
-            // 
-            this.btnPreviewSampleArea.Location = new System.Drawing.Point(11, 140);
-            this.btnPreviewSampleArea.Name = "btnPreviewSampleArea";
-            this.btnPreviewSampleArea.Size = new System.Drawing.Size(129, 23);
-            this.btnPreviewSampleArea.TabIndex = 23;
-            this.btnPreviewSampleArea.Text = "Preview sample area";
-            this.btnPreviewSampleArea.UseVisualStyleBackColor = true;
-            this.btnPreviewSampleArea.Click += new System.EventHandler(this.btnPreviewSampleArea_Click);
-            // 
-            // tbThreshold
-            // 
-            this.tbThreshold.Location = new System.Drawing.Point(323, 45);
-            this.tbThreshold.Name = "tbThreshold";
-            this.tbThreshold.Size = new System.Drawing.Size(100, 23);
-            this.tbThreshold.TabIndex = 22;
-            this.tbThreshold.Text = "10";
-            // 
-            // tbSampleSize
-            // 
-            this.tbSampleSize.Location = new System.Drawing.Point(142, 45);
-            this.tbSampleSize.Name = "tbSampleSize";
-            this.tbSampleSize.Size = new System.Drawing.Size(100, 23);
-            this.tbSampleSize.TabIndex = 22;
-            this.tbSampleSize.Text = "50";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(258, 48);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 15);
-            this.label9.TabIndex = 21;
-            this.label9.Text = "Threshold";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(52, 48);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 15);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "Sample size px";
-            // 
-            // lbGammaCorrectionSample
-            // 
-            this.lbGammaCorrectionSample.AutoSize = true;
-            this.lbGammaCorrectionSample.Location = new System.Drawing.Point(143, 26);
-            this.lbGammaCorrectionSample.Name = "lbGammaCorrectionSample";
-            this.lbGammaCorrectionSample.Size = new System.Drawing.Size(10, 15);
-            this.lbGammaCorrectionSample.TabIndex = 20;
-            this.lbGammaCorrectionSample.Text = ":";
-            // 
-            // btnSelectSample
-            // 
-            this.btnSelectSample.Location = new System.Drawing.Point(7, 22);
-            this.btnSelectSample.Name = "btnSelectSample";
-            this.btnSelectSample.Size = new System.Drawing.Size(129, 23);
-            this.btnSelectSample.TabIndex = 19;
-            this.btnSelectSample.Text = "Select sample image ";
-            this.btnSelectSample.UseVisualStyleBackColor = true;
-            this.btnSelectSample.Click += new System.EventHandler(this.btnSelectSample_Click);
-            // 
-            // tbSP2x
-            // 
-            this.tbSP2x.Location = new System.Drawing.Point(420, 73);
-            this.tbSP2x.Name = "tbSP2x";
-            this.tbSP2x.Size = new System.Drawing.Size(50, 23);
-            this.tbSP2x.TabIndex = 18;
-            this.tbSP2x.Text = "1600";
-            this.tbSP2x.TextChanged += new System.EventHandler(this.tbSP2x_TextChanged);
-            // 
-            // tbSP2y
-            // 
-            this.tbSP2y.Location = new System.Drawing.Point(501, 73);
-            this.tbSP2y.Name = "tbSP2y";
-            this.tbSP2y.Size = new System.Drawing.Size(50, 23);
-            this.tbSP2y.TabIndex = 16;
-            this.tbSP2y.Text = "1215";
-            this.tbSP2y.TextChanged += new System.EventHandler(this.tbSP2y_TextChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(307, 76);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(86, 15);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "Sample point 2";
-            // 
-            // cbRenameReplace
-            // 
-            this.cbRenameReplace.AutoSize = true;
-            this.cbRenameReplace.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbRenameReplace.Location = new System.Drawing.Point(284, 115);
-            this.cbRenameReplace.Name = "cbRenameReplace";
-            this.cbRenameReplace.Size = new System.Drawing.Size(67, 19);
-            this.cbRenameReplace.TabIndex = 13;
-            this.cbRenameReplace.Text = "Replace";
-            this.cbRenameReplace.UseVisualStyleBackColor = true;
-            // 
-            // cbRotateOptions
-            // 
-            this.cbRotateOptions.FormattingEnabled = true;
-            this.cbRotateOptions.Location = new System.Drawing.Point(158, 144);
-            this.cbRotateOptions.Name = "cbRotateOptions";
-            this.cbRotateOptions.Size = new System.Drawing.Size(187, 20);
-            this.cbRotateOptions.TabIndex = 20;
             // 
             // label10
             // 
@@ -530,6 +384,152 @@
             this.label15.Size = new System.Drawing.Size(86, 15);
             this.label15.TabIndex = 28;
             this.label15.Text = "Sample point 3";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(397, 76);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(16, 15);
+            this.label8.TabIndex = 24;
+            this.label8.Text = "x:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(139, 76);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(16, 15);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "x:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(479, 76);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(16, 15);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "y:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(217, 76);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(16, 15);
+            this.label4.TabIndex = 24;
+            this.label4.Text = "y:";
+            // 
+            // btnPreviewSampleArea
+            // 
+            this.btnPreviewSampleArea.Location = new System.Drawing.Point(11, 140);
+            this.btnPreviewSampleArea.Name = "btnPreviewSampleArea";
+            this.btnPreviewSampleArea.Size = new System.Drawing.Size(171, 23);
+            this.btnPreviewSampleArea.TabIndex = 23;
+            this.btnPreviewSampleArea.Text = "Set or preview sample areas";
+            this.btnPreviewSampleArea.UseVisualStyleBackColor = true;
+            this.btnPreviewSampleArea.Click += new System.EventHandler(this.btnPreviewSampleArea_Click);
+            // 
+            // tbThreshold
+            // 
+            this.tbThreshold.Location = new System.Drawing.Point(323, 45);
+            this.tbThreshold.Name = "tbThreshold";
+            this.tbThreshold.Size = new System.Drawing.Size(100, 23);
+            this.tbThreshold.TabIndex = 22;
+            this.tbThreshold.Text = "5";
+            // 
+            // tbSampleSize
+            // 
+            this.tbSampleSize.Location = new System.Drawing.Point(142, 45);
+            this.tbSampleSize.Name = "tbSampleSize";
+            this.tbSampleSize.Size = new System.Drawing.Size(100, 23);
+            this.tbSampleSize.TabIndex = 22;
+            this.tbSampleSize.Text = "40";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(258, 48);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(59, 15);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "Threshold";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(52, 48);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 15);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "Sample size px";
+            // 
+            // lbGammaCorrectionSample
+            // 
+            this.lbGammaCorrectionSample.AutoSize = true;
+            this.lbGammaCorrectionSample.Location = new System.Drawing.Point(143, 26);
+            this.lbGammaCorrectionSample.Name = "lbGammaCorrectionSample";
+            this.lbGammaCorrectionSample.Size = new System.Drawing.Size(10, 15);
+            this.lbGammaCorrectionSample.TabIndex = 20;
+            this.lbGammaCorrectionSample.Text = ":";
+            // 
+            // btnSelectSample
+            // 
+            this.btnSelectSample.Location = new System.Drawing.Point(7, 22);
+            this.btnSelectSample.Name = "btnSelectSample";
+            this.btnSelectSample.Size = new System.Drawing.Size(129, 23);
+            this.btnSelectSample.TabIndex = 19;
+            this.btnSelectSample.Text = "Select sample image ";
+            this.btnSelectSample.UseVisualStyleBackColor = true;
+            this.btnSelectSample.Click += new System.EventHandler(this.btnSelectSample_Click);
+            // 
+            // tbSP2x
+            // 
+            this.tbSP2x.Location = new System.Drawing.Point(420, 73);
+            this.tbSP2x.Name = "tbSP2x";
+            this.tbSP2x.Size = new System.Drawing.Size(50, 23);
+            this.tbSP2x.TabIndex = 18;
+            this.tbSP2x.Text = "1600";
+            this.tbSP2x.TextChanged += new System.EventHandler(this.tbSP2x_TextChanged);
+            // 
+            // tbSP2y
+            // 
+            this.tbSP2y.Location = new System.Drawing.Point(501, 73);
+            this.tbSP2y.Name = "tbSP2y";
+            this.tbSP2y.Size = new System.Drawing.Size(50, 23);
+            this.tbSP2y.TabIndex = 16;
+            this.tbSP2y.Text = "1215";
+            this.tbSP2y.TextChanged += new System.EventHandler(this.tbSP2y_TextChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(307, 76);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(86, 15);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "Sample point 2";
+            // 
+            // cbRenameReplace
+            // 
+            this.cbRenameReplace.AutoSize = true;
+            this.cbRenameReplace.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbRenameReplace.Location = new System.Drawing.Point(284, 115);
+            this.cbRenameReplace.Name = "cbRenameReplace";
+            this.cbRenameReplace.Size = new System.Drawing.Size(67, 19);
+            this.cbRenameReplace.TabIndex = 13;
+            this.cbRenameReplace.Text = "Replace";
+            this.cbRenameReplace.UseVisualStyleBackColor = true;
+            // 
+            // cbRotateOptions
+            // 
+            this.cbRotateOptions.FormattingEnabled = true;
+            this.cbRotateOptions.Location = new System.Drawing.Point(158, 144);
+            this.cbRotateOptions.Name = "cbRotateOptions";
+            this.cbRotateOptions.Size = new System.Drawing.Size(187, 20);
+            this.cbRotateOptions.TabIndex = 20;
             // 
             // Form1
             // 

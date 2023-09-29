@@ -399,7 +399,7 @@ namespace MergePics
                         var fileFullName = $"{_outputPath}\\{infos[i].Name.Replace(extension, "")}_GC{extension}";
                         try
                         {
-                            var result = Helper.GammaCorrect(sampleImg, img, threshold, spSize, points);
+                            var result = GammaCorrectHelper.GammaCorrect(sampleImg, img, threshold, spSize, points);
                             result.Save(fileFullName);
                         }
                         catch (Exception ex)
@@ -444,7 +444,7 @@ namespace MergePics
                 return;
             }
 
-            if (!int.TryParse(tbSP1y.Text, out int sp1y) || !int.TryParse(tbSP1x.Text, out int sp1x))
+            if (!int.TryParse(tbSP1y.Text, out int _) || !int.TryParse(tbSP1x.Text, out int _))
             {
                 System.Windows.Forms.MessageBox.Show("Set at leaset one sample point", "Message");
                 return;
@@ -456,59 +456,30 @@ namespace MergePics
                 return;
             }
 
-            using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
+            Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile);
+            try
             {
-                for (int x = sp1x; x < sp1x + spSize; x++)
+                List<Point> points = new List<Point>();
+                if (int.TryParse(tbSP1y.Text, out int sp1y) && int.TryParse(tbSP1x.Text, out int sp1x))
                 {
-                    for (int y = sp1y; y < sp1y + spSize; y++)
-                    {
-                        var currentBGR = sampleImg[y, x];
-                        var halfBGR = new Bgr(currentBGR.Blue / 3, currentBGR.Green / 3, currentBGR.Red + 255 / 2);
-                        sampleImg[y, x] = halfBGR;
-                    }
+                    points.Add(new Point(sp1x, sp1y));
                 }
-
                 if (int.TryParse(tbSP2y.Text, out int sp2y) && int.TryParse(tbSP2x.Text, out int sp2x))
                 {
-                    for (int x = sp2x; x < sp2x + spSize; x++)
-                    {
-                        for (int y = sp2y; y < sp2y + spSize; y++)
-                        {
-                            var currentBGR = sampleImg[y, x];
-                            var halfBGR = new Bgr(currentBGR.Blue + 255 / 2, currentBGR.Green / 3, currentBGR.Red / 3);
-                            sampleImg[y, x] = halfBGR;
-                        }
-                    }
+                    points.Add(new Point(sp2x, sp2y));
                 }
-
                 if (int.TryParse(tbSP3y.Text, out int sp3y) && int.TryParse(tbSP3x.Text, out int sp3x))
                 {
-                    for (int x = sp3x; x < sp3x + spSize; x++)
-                    {
-                        for (int y = sp3y; y < sp3y + spSize; y++)
-                        {
-                            var currentBGR = sampleImg[y, x];
-                            var halfBGR = new Bgr(currentBGR.Blue + 255 / 2, currentBGR.Green / 3, currentBGR.Red / 3);
-                            sampleImg[y, x] = halfBGR;
-                        }
-                    }
+                    points.Add(new Point(sp3x, sp3y));
                 }
-
                 if (int.TryParse(tbSP4y.Text, out int sp4y) && int.TryParse(tbSP4x.Text, out int sp4x))
                 {
-                    for (int x = sp4x; x < sp4x + spSize; x++)
-                    {
-                        for (int y = sp4y; y < sp4y + spSize; y++)
-                        {
-                            var currentBGR = sampleImg[y, x];
-                            var halfBGR = new Bgr(currentBGR.Blue + 255 / 2, currentBGR.Green / 3, currentBGR.Red / 3);
-                            sampleImg[y, x] = halfBGR;
-                        }
-                    }
+                    points.Add(new Point(sp4x, sp4y));
                 }
 
                 using (Form form = new Form())
                 {
+                    GammaCorrectHelper.DrawSampleAreas(sampleImg, Convert.ToInt32(tbSampleSize.Text), points);
                     Panel panel = new Panel();
                     var lbMousePosition = new System.Windows.Forms.Label();
                     panel.Controls.Add(lbMousePosition);
@@ -530,17 +501,53 @@ namespace MergePics
                         lbMousePosition.Left = posPanel.X + 10;
                     };
 
+                    var clickFlag = 0;
+                    pb.MouseClick += (object mcsender, MouseEventArgs ee) =>
+                    {
+                        var posPB = pb.PointToClient(Cursor.Position);
+                        var tbSPx = tbSP1x;
+                        var tbSPy = tbSP1y;
+                        switch (clickFlag)
+                        {
+                            case 0:
+                                tbSPx = tbSP1x; tbSPy = tbSP1y; break;
+                            case 1:
+                                tbSPx = tbSP2x; tbSPy = tbSP2y; break;
+                            case 2:
+                                tbSPx = tbSP3x; tbSPy = tbSP3y; break;
+                            case 3:
+                                tbSPx = tbSP4x; tbSPy = tbSP4y; break;
+                            default:
+                                tbSPx = tbSP1x; tbSPy = tbSP1y; break;
+                        }
+                        tbSPx.Text = posPB.X.ToString();
+                        tbSPy.Text = posPB.Y.ToString();
+                        points.RemoveAt(clickFlag);
+                        points.Insert(clickFlag, new Point(posPB.X, posPB.Y));
+                        sampleImg.Dispose();
+                        sampleImg = null;
+                        sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile);
+                        GammaCorrectHelper.DrawSampleAreas(sampleImg, Convert.ToInt32(tbSampleSize.Text), points);
+                        pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
+
+                        clickFlag = clickFlag > 2 ? 0 : clickFlag + 1;
+                    };
+
                     pb.SizeMode = PictureBoxSizeMode.AutoSize;
                     pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
 
                     form.ShowDialog();
                 }
             }
+            finally
+            {
+                sampleImg.Dispose();
+            }
         }
 
         private void tbSP1x_TextChanged(object sender, EventArgs e)
         {
-            if (int.TryParse(tbSP1x.Text,out int re))
+            if (int.TryParse(tbSP1x.Text, out int re))
             {
                 Helper.SaveAppSettings(_samplePoint1XSettingKey, re.ToString());
             }
