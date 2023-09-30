@@ -42,5 +42,13 @@ namespace MergePics
                 return;
             }
         }
+
+        public static int MakeGrayscale(Color color)
+        {
+            //create the grayscale version of the pixel
+            int grayScale = (int)((color.R * .3) + (color.G * .59) + (color.B * .11));
+
+            return grayScale;
+        }
     }
 }

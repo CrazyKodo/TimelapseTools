@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MergePics
 {
@@ -25,16 +18,30 @@ namespace MergePics
             backgroundWorker1.WorkerSupportsCancellation = true;
             backgroundWorker1.ProgressChanged += (obj, e) => backgroundWorker1_ProgressChanged(obj, e);
             backgroundWorker1.RunWorkerCompleted += (obj, e) => backgroundWorker1_RunWorkerCompleted(obj, e);
-            backgroundWorker1.DoWork += (obj, e) => DoWork(obj, e, renameType, sourcePath, outputPath, replace, backgroundWorker1);
+            backgroundWorker1.DoWork += (obj, e) => Rename(obj, e, renameType, sourcePath, outputPath, replace);
             backgroundWorker1.RunWorkerAsync();
         }
 
-        // This event handler is where the time-consuming work is done.
-        private void DoWork(object sender, DoWorkEventArgs e, RenameType renameType, string sourcePath, string outputPath, bool replace, BackgroundWorker backgroundWorker1)
+        public void ProcessMidFrame(string sourcePath, string outputPath, bool replace)
         {
+            BackgroundWorker backgroundWorker1 = new BackgroundWorker();
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.ProgressChanged += (obj, e) => backgroundWorker1_ProgressChanged(obj, e);
+            backgroundWorker1.RunWorkerCompleted += (obj, e) => backgroundWorker1_RunWorkerCompleted(obj, e);
+            backgroundWorker1.DoWork += (obj, e) => CreateMidFrame(obj, e, sourcePath, outputPath, replace);
+            backgroundWorker1.RunWorkerAsync();
+        }
 
+        private void CreateMidFrame(object obj, DoWorkEventArgs e, string sourcePath, string outputPath, bool replace)
+        {
+            BackgroundWorker worker = obj as BackgroundWorker;
+            MidFrameHelper.CreateFrame(sourcePath, outputPath, replace, worker);
+        }
+
+        private void Rename(object sender, DoWorkEventArgs e, RenameType renameType, string sourcePath, string outputPath, bool replace)
+        {
             BackgroundWorker worker = sender as BackgroundWorker;
-
             RenameHelper.Rename(renameType, sourcePath, outputPath, replace, worker);
         }
 

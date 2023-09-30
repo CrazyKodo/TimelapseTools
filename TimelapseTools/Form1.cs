@@ -89,9 +89,12 @@ namespace MergePics
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_sourcePathSettingKey]))
             {
                 _sourcePath = ConfigurationManager.AppSettings[_sourcePathSettingKey];
-                string[] files = Directory.GetFiles(_sourcePath);
-                this.lableSourceFolderPath.Text = $": {_sourcePath}";
-                this.labelFileCount.Text = $"File count: {files.Length.ToString()}.";
+                if (Directory.Exists(_sourcePath))
+                {
+                    string[] files = Directory.GetFiles(_sourcePath);
+                    this.lableSourceFolderPath.Text = $": {_sourcePath}";
+                    this.labelFileCount.Text = $"File count: {files.Length.ToString()}.";
+                }                
             }
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_outputPathSettingKey]))
@@ -249,82 +252,15 @@ namespace MergePics
                 return;
             }
 
-            DirectoryInfo d = new DirectoryInfo(_sourcePath);
-            FileInfo[] infos = d.GetFiles();
-
-            Parallel.For(0, infos.Length - 1, i =>
+            if (_progressForm == null)
             {
-                using (var img = Image.FromFile(infos[i].FullName))
-                using (var img1 = Image.FromFile(infos[i + 1].FullName))
-                {
-                    var extension = Path.GetExtension(infos[i].FullName);
-                    var fileFullName = $"{_outputPath}\\{infos[i].Name.Replace(extension, "")}_Mid{extension}";
-                    if (!cbMidFrameReplace.Checked && File.Exists(fileFullName))
-                    {
-                        return;
-                    }
-                    try
-                    {
-                        using (var result = new Bitmap(img.Width, img.Height))
-                        {
-                            var results = MergeImage((Bitmap)img, (Bitmap)img1, result);
-                            if (results != null)
-                            {
-                                results.Save(fileFullName, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                        System.Windows.Forms.MessageBox.Show(ex.Message, "Message");
-                    }
-
-                }
-            });
-
-            System.Windows.Forms.MessageBox.Show("Done", "Message");
-        }
-
-        private Bitmap MergeImage(Bitmap image1, Bitmap image2, Bitmap bitmap)
-        {
-            bitmap.SetResolution(image1.VerticalResolution, image1.HorizontalResolution);
-            for (int y = 0; y < image1.Height; y++)
-            {
-                for (int x = 0; x < image1.Width; x++)
-                {
-                    var pix1 = image1.GetPixel(x, y);
-                    var pix2 = image2.GetPixel(x, y);
-                    if (pix1 != pix2)
-                    {
-                        var midPix = MergeColor(pix1, pix2);
-                        bitmap.SetPixel(x, y, midPix);
-                    }
-                    else
-                    {
-                        bitmap.SetPixel(x, y, pix1);
-                    }
-                }
+                // Start the asynchronous operation.                
+                _progressForm = new ProgressForm();
+                _progressForm.ProcessMidFrame(_sourcePath, _outputPath, cbMidFrameReplace.Checked);
+                _progressForm.StartPosition = FormStartPosition.CenterParent;
+                _progressForm.ShowDialog();
             }
-
-            return bitmap;
-        }
-
-        private Color MergeColor(Color color1, Color color2)
-        {
-            var midR = ((int)color1.R + (int)color2.R) / 2;
-            var midG = ((int)color1.G + (int)color2.G) / 2;
-            var midB = ((int)color1.B + (int)color2.B) / 2;
-
-            return Color.FromArgb(midR, midG, midB);
-        }
-
-        public int MakeGrayscale(Color color)
-        {
-            //create the grayscale version of the pixel
-            int grayScale = (int)((color.R * .3) + (color.G * .59) + (color.B * .11));
-
-            return grayScale;
+            _progressForm = null;
         }
 
         private void btnAutoClick_Click(object sender, EventArgs e)

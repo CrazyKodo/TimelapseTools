@@ -30,7 +30,7 @@ namespace MergePics
                     var fileFullName = $"{outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}{f.Extension}";
                     Helper.TryCopy(f.FullName, fileFullName, replace);
                     processed++;
-                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems)));
+                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems * 100)));
                 });
             }
 
@@ -49,8 +49,8 @@ namespace MergePics
                     var fileFullName = $"{outputPath}\\{photoTakenDateTime.ToString(_dateTimeStringPrefix)}_{f.Name}";
                     Helper.TryCopy(f.FullName, fileFullName, replace);
                     processed++;
-                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems)));
-                }); 
+                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems * 100)));
+                });
             }
 
             if (renameType == RenameType.IntByName)
@@ -67,7 +67,7 @@ namespace MergePics
                     var fileFullName = $"{outputPath}\\{(si + 1).ToString().PadLeft(5, '0')}{extension}";
                     Helper.TryCopy(sortedInfo[si].FullName, fileFullName, replace);
                     processed++;
-                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems)));
+                    backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems * 100)));
                 }
             }
             return new ProcessResult() { };
