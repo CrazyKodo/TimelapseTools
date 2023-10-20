@@ -94,7 +94,7 @@ namespace MergePics
                     string[] files = Directory.GetFiles(_sourcePath);
                     this.lableSourceFolderPath.Text = $": {_sourcePath}";
                     this.labelFileCount.Text = $"File count: {files.Length.ToString()}.";
-                }                
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_outputPathSettingKey]))
@@ -322,37 +322,19 @@ namespace MergePics
                 points.Add(new Point(sp4x, sp4y));
             }
 
-            DirectoryInfo d = new DirectoryInfo(_sourcePath);
-            FileInfo[] infos = d.GetFiles();
-
-            using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile))
+            if (_progressForm == null)
             {
-                Parallel.For(0, infos.Length, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
-                {
-                    using (Image<Bgr, Byte> img = new Image<Bgr, Byte>(infos[i].FullName))
-                    {
-                        var extension = Path.GetExtension(infos[i].FullName);
-                        var fileFullName = $"{_outputPath}\\{infos[i].Name.Replace(extension, "")}_GC{extension}";
-                        try
-                        {
-                            var result = GammaCorrectHelper.GammaCorrect(sampleImg, img, threshold, spSize, points);
-                            result.Save(fileFullName);
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Windows.Forms.MessageBox.Show(ex.Message, "Message");
-                        }
-
-                    }
-                });
+                // Start the asynchronous operation.                
+                _progressForm = new ProgressForm();
+                _progressForm.ProcessGammaCorrection(_sourcePath, _outputPath, _gammaCorrectionSampleFile, cbMidFrameReplace.Checked, threshold, spSize, points);
+                _progressForm.StartPosition = FormStartPosition.CenterParent;
+                _progressForm.ShowDialog();
             }
-
-            System.Windows.Forms.MessageBox.Show("Done", "Message");
+            _progressForm = null;
         }
 
         private void btnSelectSample_Click(object sender, EventArgs e)
         {
-            int size = -1;
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.

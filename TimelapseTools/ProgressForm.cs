@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MergePics
@@ -31,6 +33,23 @@ namespace MergePics
             backgroundWorker1.RunWorkerCompleted += (obj, e) => backgroundWorker1_RunWorkerCompleted(obj, e);
             backgroundWorker1.DoWork += (obj, e) => CreateMidFrame(obj, e, sourcePath, outputPath, replace);
             backgroundWorker1.RunWorkerAsync();
+        }
+
+        public void ProcessGammaCorrection(string sourcePath, string outputPath, string gammaCorrectionSampleFile, bool replace, int threshold, int size, List<Point> points)
+        {
+            BackgroundWorker backgroundWorker1 = new BackgroundWorker();
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.ProgressChanged += (obj, e) => backgroundWorker1_ProgressChanged(obj, e);
+            backgroundWorker1.RunWorkerCompleted += (obj, e) => backgroundWorker1_RunWorkerCompleted(obj, e);
+            backgroundWorker1.DoWork += (obj, e) => GammaCorrection(obj, e, sourcePath, outputPath, gammaCorrectionSampleFile, replace, threshold, size, points);
+            backgroundWorker1.RunWorkerAsync();
+        }
+
+        private void GammaCorrection(object obj, DoWorkEventArgs e, string sourcePath, string outputPath, string gammaCorrectionSampleFile, bool replace, int threshold, int size, List<Point> points)
+        {
+            BackgroundWorker worker = obj as BackgroundWorker;
+            GammaCorrectHelper.GammaCorrect(sourcePath, outputPath, gammaCorrectionSampleFile, replace, threshold, size, points, worker);
         }
 
         private void CreateMidFrame(object obj, DoWorkEventArgs e, string sourcePath, string outputPath, bool replace)

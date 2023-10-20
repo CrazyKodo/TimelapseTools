@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using System.Reflection;
 
 namespace MergePics
 {
@@ -25,6 +26,43 @@ namespace MergePics
             }
 
             return sample;
+        }
+
+        public static void GammaCorrect(string sourcePath, string outputPath, string gammaCorrectionSampleFile, bool replace, int threshold, int size, List<Point> points, BackgroundWorker backgroundWorker1)
+        {
+            DirectoryInfo d = new DirectoryInfo(sourcePath);
+            FileInfo[] infos = d.GetFiles();
+
+            var totalItems = infos.Length;
+            var processed = 0m;
+
+            using (Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(gammaCorrectionSampleFile))
+            {
+                Parallel.For(0, infos.Length, new ParallelOptions { MaxDegreeOfParallelism = 5 }, i =>
+                {
+                    using (Image<Bgr, Byte> img = new Image<Bgr, Byte>(infos[i].FullName))
+                    {
+                        var extension = Path.GetExtension(infos[i].FullName);
+                        var fileFullName = $"{outputPath}\\{infos[i].Name.Replace(extension, "")}_GC{extension}";
+                        if (!replace && File.Exists(fileFullName))
+                        {
+                            return;
+                        }
+                        try
+                        {
+                            var result = GammaCorrectHelper.GammaCorrect(sampleImg, img, threshold, size, points);
+                            result.Save(fileFullName); 
+                            processed++;
+                            backgroundWorker1.ReportProgress(decimal.ToInt32(Math.Round(processed / totalItems * 100)));
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Windows.Forms.MessageBox.Show(ex.Message, "Message");
+                        }
+
+                    }
+                });
+            }
         }
 
         public static Image<Bgr, Byte> GammaCorrect(Image<Bgr, Byte> sample, Image<Bgr, Byte> image, int threshold, int size, List<Point> points)
