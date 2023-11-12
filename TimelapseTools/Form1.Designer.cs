@@ -74,7 +74,11 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cbRenameReplace = new System.Windows.Forms.CheckBox();
             this.cbRotateOptions = new System.Windows.Forms.ComboBox();
+            this.btnManualImgRegistrationForm = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rb1 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSelectFolder
@@ -286,7 +290,7 @@
             this.groupBox1.Controls.Add(this.tbSP1y);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 258);
+            this.groupBox1.Location = new System.Drawing.Point(12, 359);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(776, 180);
             this.groupBox1.TabIndex = 19;
@@ -531,11 +535,46 @@
             this.cbRotateOptions.Size = new System.Drawing.Size(187, 20);
             this.cbRotateOptions.TabIndex = 20;
             // 
+            // btnManualImgRegistrationForm
+            // 
+            this.btnManualImgRegistrationForm.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnManualImgRegistrationForm.Location = new System.Drawing.Point(12, 234);
+            this.btnManualImgRegistrationForm.Name = "btnManualImgRegistrationForm";
+            this.btnManualImgRegistrationForm.Size = new System.Drawing.Size(212, 23);
+            this.btnManualImgRegistrationForm.TabIndex = 21;
+            this.btnManualImgRegistrationForm.Text = "Manual Img Registration Sequence";
+            this.btnManualImgRegistrationForm.UseVisualStyleBackColor = true;
+            this.btnManualImgRegistrationForm.Click += new System.EventHandler(this.btnManualImgRegistrationForm_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rb1);
+            this.groupBox2.Location = new System.Drawing.Point(232, 225);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(416, 41);
+            this.groupBox2.TabIndex = 22;
+            this.groupBox2.TabStop = false;
+            // 
+            // rb1
+            // 
+            this.rb1.AutoSize = true;
+            this.rb1.Checked = true;
+            this.rb1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rb1.Location = new System.Drawing.Point(6, 11);
+            this.rb1.Name = "rb1";
+            this.rb1.Size = new System.Drawing.Size(123, 19);
+            this.rb1.TabIndex = 0;
+            this.rb1.TabStop = true;
+            this.rb1.Text = "1 Point - Shift only";
+            this.rb1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(816, 551);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.btnManualImgRegistrationForm);
             this.Controls.Add(this.cbRotateOptions);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbRenameReplace);
@@ -556,6 +595,8 @@
             this.Text = "TimeLapseTools";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -609,6 +650,9 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox tbSP3y;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button btnManualImgRegistrationForm;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton rb1;
     }
 }
 

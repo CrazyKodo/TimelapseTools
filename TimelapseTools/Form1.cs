@@ -54,6 +54,7 @@ namespace MergePics
         private int _gammaCorrectionSampleFileSize;
 
         private ProgressForm _progressForm;
+        private ManualImgRegistration2DShiftForm _manualImgRegistrationForm;
 
         public Form1()
         {
@@ -525,6 +526,25 @@ namespace MergePics
             {
                 Helper.SaveAppSettings(_samplePoint4YSettingKey, re.ToString());
             }
+        }
+
+        private void btnManualImgRegistrationForm_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(_sourcePath) || string.IsNullOrWhiteSpace(_outputPath))
+            {
+                System.Windows.Forms.MessageBox.Show("Select a folder first", "Message");
+                return;
+            }
+
+            if (_manualImgRegistrationForm == null)
+            {
+                // Start the asynchronous operation.                
+                _manualImgRegistrationForm = new ManualImgRegistration2DShiftForm();
+                //_progressForm.ProcessMidFrame(_sourcePath, _outputPath, cbMidFrameReplace.Checked);
+                _manualImgRegistrationForm.StartPosition = FormStartPosition.CenterParent;
+                _manualImgRegistrationForm.ShowDialog();
+            }
+            _manualImgRegistrationForm = null;
         }
     }
 }

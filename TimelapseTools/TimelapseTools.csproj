@@ -79,6 +79,12 @@
     </Compile>
     <Compile Include="Helpers\MidFrameHelper.cs" />
     <Compile Include="Helpers\Helper.cs" />
+    <Compile Include="ManualImgRegistration2DShiftForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManualImgRegistration2DShiftForm.Designer.cs">
+      <DependentUpon>ManualImgRegistration2DShiftForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProcessResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgressForm.cs">
@@ -92,6 +98,9 @@
     <Compile Include="Helpers\RenameHelper.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManualImgRegistration2DShiftForm.resx">
+      <DependentUpon>ManualImgRegistration2DShiftForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressForm.resx">
       <DependentUpon>ProgressForm.cs</DependentUpon>
