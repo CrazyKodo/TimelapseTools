@@ -47,10 +47,12 @@ namespace MergePics
         private const string _samplePoint3YSettingKey = "SP3y";
         private const string _samplePoint4XSettingKey = "SP4x";
         private const string _samplePoint4YSettingKey = "SP4y";
+        private const string _sequenceFolderPathSettingKey = "SequenceFolderPath";
 
         private string _sourcePath;
         private string _outputPath;
         private string _gammaCorrectionSampleFile;
+        private string _sequenceFolderPath;
         private int _gammaCorrectionSampleFileSize;
 
         private ProgressForm _progressForm;
@@ -545,6 +547,26 @@ namespace MergePics
                 _manualImgRegistrationForm.ShowDialog();
             }
             _manualImgRegistrationForm = null;
+        }
+
+        private void btnSequenceFolder_Click(object sender, EventArgs e)
+        {
+            DialogResult result = folderBrowserDialog1.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog1.SelectedPath))
+            {
+                this.lbSequenceFolderPath.Text = $": {folderBrowserDialog1.SelectedPath}";
+                _sequenceFolderPath = folderBrowserDialog1.SelectedPath;
+                string[] files = Directory.GetFiles(folderBrowserDialog1.SelectedPath);
+                this.lbSequenceFolderFileCount.Text = $"File count: {files.Length.ToString()}.";
+
+
+                Helper.SaveAppSettings(_sequenceFolderPathSettingKey, _sequenceFolderPath);
+                return;
+            }
+
+            this.lbSequenceFolderPath.Text = "Select a folder first";
+            _sequenceFolderPath = string.Empty;
         }
     }
 }
