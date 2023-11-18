@@ -129,6 +129,11 @@ namespace MergePics
                 this.tbSP4x.Text = xPoint4.ToString();
                 this.tbSP4y.Text = yPoint4.ToString();
             }
+
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_sequenceFolderPathSettingKey]))
+            {
+                _sequenceFolderPath = ConfigurationManager.AppSettings[_sequenceFolderPathSettingKey];
+            }
         }
 
         public void DoMouseClick()
@@ -532,7 +537,7 @@ namespace MergePics
 
         private void btnManualImgRegistrationForm_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(_sourcePath) || string.IsNullOrWhiteSpace(_outputPath))
+            if (string.IsNullOrWhiteSpace(_sequenceFolderPath))
             {
                 System.Windows.Forms.MessageBox.Show("Select a folder first", "Message");
                 return;
@@ -542,6 +547,7 @@ namespace MergePics
             {
                 // Start the asynchronous operation.                
                 _manualImgRegistrationForm = new ManualImgRegistration2DShiftForm();
+                _manualImgRegistrationForm.SequenceFolderPath = _sequenceFolderPath;
                 //_progressForm.ProcessMidFrame(_sourcePath, _outputPath, cbMidFrameReplace.Checked);
                 _manualImgRegistrationForm.StartPosition = FormStartPosition.CenterParent;
                 _manualImgRegistrationForm.ShowDialog();

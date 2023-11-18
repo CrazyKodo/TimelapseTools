@@ -131,6 +131,7 @@
             this.Controls.Add(this.pb1);
             this.Name = "ManualImgRegistration2DShiftForm";
             this.Text = "ManualImgRegistration";
+            this.Load += new System.EventHandler(this.ManualImgRegistration2DShiftForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb2SP1)).EndInit();
