@@ -35,7 +35,8 @@
             this.pbMerge = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbP2Idx = new System.Windows.Forms.Label();
+            this.lbP1Idx = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pb1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb2SP1)).BeginInit();
@@ -51,7 +52,7 @@
             this.pb1.Size = new System.Drawing.Size(800, 600);
             this.pb1.TabIndex = 0;
             this.pb1.TabStop = false;
-            this.pb1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pb1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pb1_MouseClick);
             // 
             // pb2
             // 
@@ -64,6 +65,7 @@
             // 
             // pb2SP1
             // 
+            this.pb2SP1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pb2SP1.Location = new System.Drawing.Point(944, 432);
             this.pb2SP1.Name = "pb2SP1";
             this.pb2SP1.Size = new System.Drawing.Size(240, 180);
@@ -72,6 +74,7 @@
             // 
             // pb1SP1
             // 
+            this.pb1SP1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pb1SP1.Location = new System.Drawing.Point(818, 12);
             this.pb1SP1.Name = "pb1SP1";
             this.pb1SP1.Size = new System.Drawing.Size(240, 180);
@@ -80,6 +83,7 @@
             // 
             // pbMerge
             // 
+            this.pbMerge.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbMerge.Location = new System.Drawing.Point(878, 225);
             this.pbMerge.Name = "pbMerge";
             this.pbMerge.Size = new System.Drawing.Size(240, 180);
@@ -106,22 +110,33 @@
             this.button2.Text = "button1";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lbP2Idx
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(942, 660);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "label1";
+            this.lbP2Idx.AutoSize = true;
+            this.lbP2Idx.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbP2Idx.Location = new System.Drawing.Point(1585, 615);
+            this.lbP2Idx.Name = "lbP2Idx";
+            this.lbP2Idx.Size = new System.Drawing.Size(38, 15);
+            this.lbP2Idx.TabIndex = 4;
+            this.lbP2Idx.Text = "label1";
+            // 
+            // lbP1Idx
+            // 
+            this.lbP1Idx.AutoSize = true;
+            this.lbP1Idx.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbP1Idx.Location = new System.Drawing.Point(364, 615);
+            this.lbP1Idx.Name = "lbP1Idx";
+            this.lbP1Idx.Size = new System.Drawing.Size(38, 15);
+            this.lbP1Idx.TabIndex = 4;
+            this.lbP1Idx.Text = "label1";
             // 
             // ManualImgRegistration2DShiftForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2002, 718);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbP1Idx);
+            this.Controls.Add(this.lbP2Idx);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pbMerge);
@@ -151,6 +166,7 @@
         private System.Windows.Forms.PictureBox pbMerge;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbP2Idx;
+        private System.Windows.Forms.Label lbP1Idx;
     }
 }

@@ -133,6 +133,12 @@ namespace MergePics
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_sequenceFolderPathSettingKey]))
             {
                 _sequenceFolderPath = ConfigurationManager.AppSettings[_sequenceFolderPathSettingKey];
+                if (Directory.Exists(_sequenceFolderPath))
+                {
+                    string[] files = Directory.GetFiles(_sequenceFolderPath);
+                    this.lbSequenceFolderPath.Text = $": {_sequenceFolderPath}";
+                    this.lbSequenceFolderFileCount.Text = $"File count: {files.Length.ToString()}.";
+                }
             }
         }
 
