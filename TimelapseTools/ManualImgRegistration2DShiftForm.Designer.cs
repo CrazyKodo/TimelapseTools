@@ -66,27 +66,27 @@
             // pb2SP1
             // 
             this.pb2SP1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pb2SP1.Location = new System.Drawing.Point(944, 432);
+            this.pb2SP1.Location = new System.Drawing.Point(944, 415);
             this.pb2SP1.Name = "pb2SP1";
-            this.pb2SP1.Size = new System.Drawing.Size(240, 180);
+            this.pb2SP1.Size = new System.Drawing.Size(240, 200);
             this.pb2SP1.TabIndex = 2;
             this.pb2SP1.TabStop = false;
             // 
             // pb1SP1
             // 
             this.pb1SP1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pb1SP1.Location = new System.Drawing.Point(818, 12);
+            this.pb1SP1.Location = new System.Drawing.Point(818, 11);
             this.pb1SP1.Name = "pb1SP1";
-            this.pb1SP1.Size = new System.Drawing.Size(240, 180);
+            this.pb1SP1.Size = new System.Drawing.Size(240, 200);
             this.pb1SP1.TabIndex = 2;
             this.pb1SP1.TabStop = false;
             // 
             // pbMerge
             // 
             this.pbMerge.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbMerge.Location = new System.Drawing.Point(878, 225);
+            this.pbMerge.Location = new System.Drawing.Point(878, 213);
             this.pbMerge.Name = "pbMerge";
-            this.pbMerge.Size = new System.Drawing.Size(240, 180);
+            this.pbMerge.Size = new System.Drawing.Size(240, 200);
             this.pbMerge.TabIndex = 2;
             this.pbMerge.TabStop = false;
             // 
