@@ -13,6 +13,8 @@ namespace MergePics
 {
     internal class ManualRegHelper
     {
+        private static readonly int _lineWidth = 5;
+        private static readonly int _crosshairsSize = 50;
         private static readonly Random rand = new Random();
 
         public static void LoadPictureBox(PictureBox pictureBox, Image<Bgr, Byte> image, PictureBoxSizeMode pictureBoxSizeMode, Label label, int index, int totalCount)
@@ -30,37 +32,151 @@ namespace MergePics
         public static Image<Bgr, Byte> GetSampleAreaImg(Image<Bgr, Byte> image, int width, int height, Point point)
         {
             var imagepart = image.Copy();
-            var roi = new Rectangle(point.X, point.Y, width, height);
+            var x = (point.X - width / 2) > 0 ? point.X - width / 2 : 0;
+            var y = (point.Y - height / 2) > 0 ? point.Y - height / 2 : 0;
+            var roi = new Rectangle(point.X - width / 2, point.Y - height / 2, width, height);
             imagepart.ROI = roi;
 
             return imagepart;
         }
 
-        public static Image<Bgr, Byte> DrawSampleArea(Image<Bgr, Byte> sample, int width, int height, Point point)
+        public static Image<Bgr, Byte> DrawCrosshairs(Image<Bgr, Byte> sample, Point point)
         {
-            var seed = rand.Next(100, 400);
+            var xMin = (point.X - _crosshairsSize / 2);
+            var xMax = (point.X + _crosshairsSize / 2);
+            var yMin = (point.Y - _crosshairsSize / 2);
+            var yMax = (point.Y + _crosshairsSize / 2);
             try
             {
-                for (int x = point.X - width / 2; x < point.X + width / 2; x++)
+                for (int x = xMin; x < xMax; x++)
                 {
                     if (x < 0 || x >= sample.Width)
                     {
                         continue;
                     }
 
-                    for (int y = point.Y - height / 2; y < point.Y + height / 2; y++)
+                    for (int y = yMin; y < yMax; y++)
                     {
                         if (y < 0 || y >= sample.Height)
                         {
                             continue;
                         }
 
-                        var currentBGR = sample[y, x];
-                        var blue = 255 - currentBGR.Blue + (seed < 200 ? (seed - 100d) / 100 * 255 : 0);
-                        var red = 255 - currentBGR.Red + ((200 <= seed && seed < 300) ? (seed - 200d) / 100 * 255 : 0);
-                        var green = 255 - currentBGR.Green + (300 <= seed ? (seed - 300d) / 100 * 255 : 0);
-                        var halfBGR = new Bgr(blue / 2, green / 2, red / 2);
-                        sample[y, x] = halfBGR;
+                        //Draw horizontal line
+                        if (xMin < x && x < xMax 
+                            && y > point.Y - _lineWidth / 2 &&  y < point.Y + _lineWidth/2)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+
+                        //Draw vertical line 
+                        if (yMin < y && y < yMax 
+                            && x > point.X - _lineWidth/2 && x < point.X + _lineWidth/2)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return sample;
+        }
+
+        public static Image<Bgr, Byte> DrawCrosshairs(Image<Bgr, Byte> sample,int pointX, int pointY)
+        {
+            var xMin = (pointX - _crosshairsSize / 2);
+            var xMax = (pointX + _crosshairsSize / 2);
+            var yMin = (pointY - _crosshairsSize / 2);
+            var yMax = (pointY + _crosshairsSize / 2);
+            try
+            {
+                for (int x = xMin; x < xMax; x++)
+                {
+                    if (x < 0 || x >= sample.Width)
+                    {
+                        continue;
+                    }
+
+                    for (int y = yMin; y < yMax; y++)
+                    {
+                        if (y < 0 || y >= sample.Height)
+                        {
+                            continue;
+                        }
+
+                        //Draw horizontal line
+                        if (xMin < x && x < xMax
+                            && y > pointY - 2 && y < pointY + 2)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+
+                        //Draw vertical line 
+                        if (yMin < y && y < yMax
+                            && x > pointX - 2 && x < pointX + 2)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return sample;
+        }
+
+        public static Image<Bgr, Byte> DrawSampleArea(Image<Bgr, Byte> sample, int width, int height, Point point)
+        {
+            var xMin = (point.X - width / 2);
+            var xMax = (point.X + width / 2);
+            var yMin = (point.Y - height / 2);
+            var yMax = (point.Y + height / 2);
+            try
+            {
+                for (int x = xMin; x < xMax; x++)
+                {
+                    if (x < 0 || x >= sample.Width)
+                    {
+                        continue;
+                    }
+
+                    for (int y = yMin; y < yMax; y++)
+                    {
+                        if (y < 0 || y >= sample.Height)
+                        {
+                            continue;
+                        }
+
+                        //Draw left border
+                        if (xMin < x && x < xMin + _lineWidth)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+
+                        //Draw right border
+                        if (xMax - _lineWidth < x && x < xMax)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+
+                        //Draw top border
+                        if (yMin < y && y < yMin + _lineWidth)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
+
+                        //Draw bottom border
+                        if (yMax - _lineWidth < y && y < yMax)
+                        {
+                            sample[y, x] = new Bgr(0, 0, 255);
+                        }
 
                     }
                 }
@@ -72,6 +188,42 @@ namespace MergePics
             }
 
             return sample;
+        }
+
+        public static Point GetActualPoint(PictureBox pictureBox, Point point)
+        {
+            Point unscaled_p = new Point();
+
+            // image and container dimensions
+            int w_i = pictureBox.Image.Width;
+            int h_i = pictureBox.Image.Height;
+            int w_c = pictureBox.Width;
+            int h_c = pictureBox.Height;
+
+            float imageRatio = w_i / (float)h_i; // image W:H ratio
+            float containerRatio = w_c / (float)h_c; // container W:H ratio
+
+            if (imageRatio >= containerRatio)
+            {
+                // horizontal image
+                float scaleFactor = w_c / (float)w_i;
+                float scaledHeight = h_i * scaleFactor;
+                // calculate gap between top of container and top of image
+                float filler = Math.Abs(h_c - scaledHeight) / 2;
+                unscaled_p.X = (int)(point.X / scaleFactor);
+                unscaled_p.Y = (int)((point.Y - filler) / scaleFactor);
+            }
+            else
+            {
+                // vertical image
+                float scaleFactor = h_c / (float)h_i;
+                float scaledWidth = w_i * scaleFactor;
+                float filler = Math.Abs(w_c - scaledWidth) / 2;
+                unscaled_p.X = (int)((point.X - filler) / scaleFactor);
+                unscaled_p.Y = (int)(point.Y / scaleFactor);
+            }
+
+            return unscaled_p;
         }
     }
 }

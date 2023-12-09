@@ -67,51 +67,19 @@ namespace MergePics
         {
             var point = pb1.PointToClient(Cursor.Position);
 
-            var unScaledPoint = GetActualPoint(pb1, point);
+            var unScaledPoint = ManualRegHelper.GetActualPoint(pb1, point);
             samplePoint1 = unScaledPoint;
 
             var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[_currentImgIdx].FullName);
             var sampleAreaImg1 = ManualRegHelper.GetSampleAreaImg(sourceImg, 240, 200, samplePoint1);
+            ManualRegHelper.DrawCrosshairs(sampleAreaImg1, sampleAreaImg1.Width / 2, sampleAreaImg1.Height / 2);
             ManualRegHelper.LoadPictureBox(pb1SP1, sampleAreaImg1, PictureBoxSizeMode.Zoom);
 
             ManualRegHelper.DrawSampleArea(sourceImg, 240, 200, unScaledPoint);
+            ManualRegHelper.DrawCrosshairs(sourceImg, samplePoint1);
             pb1.Image = Emgu.CV.BitmapExtension.ToBitmap(sourceImg.Mat);
         }
 
-        private Point GetActualPoint(PictureBox pictureBox, Point point)
-        {
-            Point unscaled_p = new Point();
 
-            // image and container dimensions
-            int w_i = pb1.Image.Width;
-            int h_i = pb1.Image.Height;
-            int w_c = pb1.Width;
-            int h_c = pb1.Height;
-
-            float imageRatio = w_i / (float)h_i; // image W:H ratio
-            float containerRatio = w_c / (float)h_c; // container W:H ratio
-
-            if (imageRatio >= containerRatio)
-            {
-                // horizontal image
-                float scaleFactor = w_c / (float)w_i;
-                float scaledHeight = h_i * scaleFactor;
-                // calculate gap between top of container and top of image
-                float filler = Math.Abs(h_c - scaledHeight) / 2;
-                unscaled_p.X = (int)(point.X / scaleFactor);
-                unscaled_p.Y = (int)((point.Y - filler) / scaleFactor);
-            }
-            else
-            {
-                // vertical image
-                float scaleFactor = h_c / (float)h_i;
-                float scaledWidth = w_i * scaleFactor;
-                float filler = Math.Abs(w_c - scaledWidth) / 2;
-                unscaled_p.X = (int)((point.X - filler) / scaleFactor);
-                unscaled_p.Y = (int)(point.Y / scaleFactor);
-            }
-
-            return unscaled_p;
-        }
     }
 }
