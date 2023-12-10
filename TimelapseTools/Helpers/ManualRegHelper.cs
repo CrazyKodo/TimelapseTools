@@ -110,14 +110,14 @@ namespace MergePics
 
                         //Draw horizontal line
                         if (xMin < x && x < xMax
-                            && y > pointY - 2 && y < pointY + 2)
+                            && y > pointY - 1 && y < pointY + 1)
                         {
                             sample[y, x] = new Bgr(0, 0, 255);
                         }
 
                         //Draw vertical line 
                         if (yMin < y && y < yMax
-                            && x > pointX - 2 && x < pointX + 2)
+                            && x > pointX - 1 && x < pointX + 1)
                         {
                             sample[y, x] = new Bgr(0, 0, 255);
                         }
