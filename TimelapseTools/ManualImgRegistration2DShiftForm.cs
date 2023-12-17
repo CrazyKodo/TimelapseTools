@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection.Emit;
 using System.Configuration;
+using Emgu.CV.XPhoto;
 
 namespace MergePics
 {
@@ -26,23 +27,25 @@ namespace MergePics
 
         private int _currentImgIdx = 0;
         private FileInfo[] _loadedFileInfo = null;
-        private int samplePoint1X;
-        private int samplePoint1Y;
-        private int samplePoint2X;
-        private int samplePoint2Y;
+        private int _samplePoint1X;
+        private int _samplePoint1Y;
+        private int _samplePoint2X;
+        private int _samplePoint2Y;
+        private Image<Bgr, Byte> _sampleImg1 = null;
+        private Image<Bgr, Byte> _sampleImg2 = null;
 
         private Point SamplePoint1
         {
             get
             {
-                return new Point(samplePoint1X, samplePoint1Y);
+                return new Point(_samplePoint1X, _samplePoint1Y);
             }
             set
             {
-                samplePoint1X = value.X;
-                samplePoint1Y = value.Y;
-                Helper.SaveAppSettings(_samplePoint1XSettingKey, samplePoint1X.ToString());
-                Helper.SaveAppSettings(_samplePoint1YSettingKey, samplePoint1Y.ToString());
+                _samplePoint1X = value.X;
+                _samplePoint1Y = value.Y;
+                Helper.SaveAppSettings(_samplePoint1XSettingKey, _samplePoint1X.ToString());
+                Helper.SaveAppSettings(_samplePoint1YSettingKey, _samplePoint1Y.ToString());
             }
         }
 
@@ -50,14 +53,14 @@ namespace MergePics
         {
             get
             {
-                return new Point(samplePoint2X, samplePoint2Y);
+                return new Point(_samplePoint2X, _samplePoint2Y);
             }
             set
             {
-                samplePoint2X = value.X;
-                samplePoint2Y = value.Y;
-                Helper.SaveAppSettings(_samplePoint2XSettingKey, samplePoint2X.ToString());
-                Helper.SaveAppSettings(_samplePoint2YSettingKey, samplePoint2Y.ToString());
+                _samplePoint2X = value.X;
+                _samplePoint2Y = value.Y;
+                Helper.SaveAppSettings(_samplePoint2XSettingKey, _samplePoint2X.ToString());
+                Helper.SaveAppSettings(_samplePoint2YSettingKey, _samplePoint2Y.ToString());
             }
         }
 
@@ -72,19 +75,19 @@ namespace MergePics
 
             if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint1XSettingKey], out int xPoint1))
             {
-                samplePoint1X = xPoint1;
+                _samplePoint1X = xPoint1;
             }
             if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint1YSettingKey], out int yPoint1))
             {
-                samplePoint1Y = yPoint1;
+                _samplePoint1Y = yPoint1;
             }
             if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint2XSettingKey], out int xPoint2))
             {
-                samplePoint2X = xPoint2;
+                _samplePoint2X = xPoint2;
             }
             if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint2YSettingKey], out int yPoint2))
             {
-                samplePoint2Y = yPoint2;
+                _samplePoint2Y = yPoint2;
             }
         }
 
@@ -123,8 +126,10 @@ namespace MergePics
             SamplePoint1 = unScaledPoint;
 
             var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
-            PickSample(pb1, pb1SP1, sourceImg, unScaledPoint);
+            _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg, unScaledPoint);
             pb1.Focus();
+
+            ManualRegHelper.LoadPictureBox(pbMerge, _sampleImg1, PictureBoxSizeMode.Zoom);
         }
 
         private void pb2_Click(object sender, EventArgs e)
@@ -134,19 +139,22 @@ namespace MergePics
             SamplePoint2 = unScaledPoint;
 
             var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
-            PickSample(pb2, pb2SP1, sourceImg, unScaledPoint);
+            _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg, unScaledPoint);
             pb2.Focus();
         }
 
-        private void PickSample(PictureBox pictureBox, PictureBox samplePB, Image<Bgr, Byte> image, Point point)
+        private Image<Bgr, Byte> PickSample(PictureBox pictureBox, PictureBox samplePB, Image<Bgr, Byte> image, Point point)
         {
             var sampleAreaImg1 = ManualRegHelper.GetSampleAreaImg(image, 240, 200, point);
+            var sampleImg = sampleAreaImg1.Clone();
             ManualRegHelper.DrawCrosshairs(sampleAreaImg1, sampleAreaImg1.Width / 2, sampleAreaImg1.Height / 2);
             ManualRegHelper.LoadPictureBox(samplePB, sampleAreaImg1, PictureBoxSizeMode.Zoom);
 
             ManualRegHelper.DrawSampleArea(image, 240, 200, point);
             ManualRegHelper.DrawCrosshairs(image, point);
             pictureBox.Image = Emgu.CV.BitmapExtension.ToBitmap(image.Mat);
+
+            return sampleImg;
         }
 
         private Point ProcessKeyMove(int xOffset, int yOffset, Point point, string imgPath, PictureBox pictureBox, PictureBox samplePB)
