@@ -14,6 +14,8 @@ using System.Windows.Forms;
 using System.Reflection.Emit;
 using System.Configuration;
 using Emgu.CV.XPhoto;
+using System.Xml.Linq;
+using System.Threading;
 
 namespace MergePics
 {
@@ -33,6 +35,9 @@ namespace MergePics
         private int _samplePoint2Y;
         private Image<Bgr, Byte> _sampleImg1 = null;
         private Image<Bgr, Byte> _sampleImg2 = null;
+
+        private CancellationTokenSource cts = new CancellationTokenSource();
+        private DateTime timerStarted { get; set; } = DateTime.UtcNow.AddYears(-1);
 
         private Point SamplePoint1
         {
@@ -129,7 +134,7 @@ namespace MergePics
             _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg, unScaledPoint);
             pb1.Focus();
 
-            ManualRegHelper.LoadPictureBox(pbMerge, _sampleImg1, PictureBoxSizeMode.Zoom);
+            RenderMergeResult();
         }
 
         private void pb2_Click(object sender, EventArgs e)
@@ -141,6 +146,7 @@ namespace MergePics
             var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
             _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg, unScaledPoint);
             pb2.Focus();
+            RenderMergeResult();
         }
 
         private Image<Bgr, Byte> PickSample(PictureBox pictureBox, PictureBox samplePB, Image<Bgr, Byte> image, Point point)
@@ -166,6 +172,7 @@ namespace MergePics
             PickSample(pictureBox, samplePB, sourceImg, point);
             return point;
         }
+
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             switch (keyData)
@@ -230,5 +237,37 @@ namespace MergePics
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        public void RenderMergeResult()
+        {
+            if (_sampleImg1 == null || _sampleImg2 == null)
+            {
+                return;
+            }
+            Throttle(500, _ => RenderMergeResult(_sampleImg1, _sampleImg2));
+        }
+
+        public void RenderMergeResult(Image<Bgr, Byte> image, Image<Bgr, Byte> image1)
+        {
+            var result = ManualRegHelper.MergeImage(image, image1);
+            ManualRegHelper.LoadPictureBox(pbMerge, result, PictureBoxSizeMode.Zoom);
+        }
+
+        public void Throttle(int interval, Action<object> action, object param = null)
+        {
+            cts.Cancel();
+            cts = new CancellationTokenSource();
+
+            var curTime = DateTime.UtcNow;
+            if (curTime.Subtract(timerStarted).TotalMilliseconds < interval)
+                interval -= (int)curTime.Subtract(timerStarted).TotalMilliseconds;
+
+            Task.Run(async delegate
+            {
+                await Task.Delay(interval, cts.Token);
+                action.Invoke(param);
+            });
+
+            timerStarted = curTime;
+        }
     }
 }

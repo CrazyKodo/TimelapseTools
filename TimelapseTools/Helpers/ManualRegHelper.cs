@@ -63,15 +63,15 @@ namespace MergePics
                         }
 
                         //Draw horizontal line
-                        if (xMin < x && x < xMax 
-                            && y > point.Y - _lineWidth / 2 &&  y < point.Y + _lineWidth/2)
+                        if (xMin < x && x < xMax
+                            && y > point.Y - _lineWidth / 2 && y < point.Y + _lineWidth / 2)
                         {
                             sample[y, x] = new Bgr(0, 0, 255);
                         }
 
                         //Draw vertical line 
-                        if (yMin < y && y < yMax 
-                            && x > point.X - _lineWidth/2 && x < point.X + _lineWidth/2)
+                        if (yMin < y && y < yMax
+                            && x > point.X - _lineWidth / 2 && x < point.X + _lineWidth / 2)
                         {
                             sample[y, x] = new Bgr(0, 0, 255);
                         }
@@ -86,7 +86,7 @@ namespace MergePics
             return sample;
         }
 
-        public static Image<Bgr, Byte> DrawCrosshairs(Image<Bgr, Byte> sample,int pointX, int pointY)
+        public static Image<Bgr, Byte> DrawCrosshairs(Image<Bgr, Byte> sample, int pointX, int pointY)
         {
             var xMin = (pointX - _crosshairsSize / 2);
             var xMax = (pointX + _crosshairsSize / 2);
@@ -224,6 +224,60 @@ namespace MergePics
             }
 
             return unscaled_p;
+        }
+
+        public static Image<Bgr, Byte> MergeImage(Image<Bgr, Byte> image, Image<Bgr, Byte> image1)
+        {
+            if (image == null || image1 == null)
+            {
+                return new Image<Bgr, byte>(Size.Empty);
+            }
+            var xMax = image.Width > image1.Width ? image.Width : image1.Width;
+            var yMax = image.Height > image1.Height ? image.Height : image1.Height;
+
+            var sample = new Image<Bgr, byte>(xMax, yMax);
+            try
+            {
+                for (int x = 0; x < xMax; x++)
+                {
+                    for (int y = 0; y < yMax; y++)
+                    {
+                        var point1 = new Bgr();
+                        var point2 = new Bgr();
+                        if (image.Width > x && image.Height > y)
+                        {
+                            point1 = image[y, x];
+                        }
+                        if (image1.Width > x && image1.Height > y)
+                        {
+                            point2 = image1[y, x];
+                        }
+                        sample[y, x] = MergeBgr(point1, point2);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return sample;
+        }
+
+        private static Bgr MergeBgr(Bgr bgr, Bgr bgr1)
+        {
+            try
+            {
+                var blue = bgr.Blue / 2 + bgr1.Blue / 2;
+                var red = bgr.Red / 2 + bgr1.Red / 2;
+                var green = bgr.Green / 2 + bgr1.Green / 2;
+                return new Bgr(blue, green, red);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
