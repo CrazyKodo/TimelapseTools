@@ -2,7 +2,7 @@
 Current working functions
 
 Bulk Rename<br />
-Bulk Rotate<br />(support all RotateFlipType now,https://learn.microsoft.com/en-us/dotnet/api/system.drawing.rotatefliptype?view=dotnet-plat-ext-7.0)<br />
+Bulk Rotate<br />
 Bulk Gamma correction <br />(compare with a sample image, by 4 sample points, can be selected by click in preview mode)<br />
 Bulk generate mid frame <br />
 Manual Registration Helper<br />(Just 'Select a folder', pick reference points, and Next )
