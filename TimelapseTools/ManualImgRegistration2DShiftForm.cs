@@ -29,6 +29,7 @@ namespace MergePics
         private const string _outputFilenameTrailing = "processed";
 
         private int _currentImgIdx = 0;
+        private int _currentfolderItems = 0;
         private FileInfo[] _loadedFileInfo = null;
         private int _samplePoint1X;
         private int _samplePoint1Y;
@@ -106,22 +107,12 @@ namespace MergePics
             DirectoryInfo d = new DirectoryInfo(SequenceFolderPath);
             _loadedFileInfo = d.GetFiles().OrderBy(f => f.Name).ToArray();
 
-            var totalItems = _loadedFileInfo.Length;
+            _currentfolderItems = _loadedFileInfo.Length;
 
-            if (totalItems >= 2)
+            if (_currentfolderItems >= 2)
             {
-                var sampleImg1 = new Image<Bgr, Byte>(_loadedFileInfo[_currentImgIdx].FullName);
-                ManualRegHelper.LoadPictureBox(pb1, sampleImg1, PictureBoxSizeMode.Zoom, lbP1Idx, _currentImgIdx, totalItems);
-
                 _currentImgIdx++;
-                var sampleImg = new Image<Bgr, Byte>(_loadedFileInfo[_currentImgIdx].FullName);
-                ManualRegHelper.LoadPictureBox(pb2, sampleImg, PictureBoxSizeMode.Zoom, lbP2Idx, _currentImgIdx, totalItems);
-
-                var sourceImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
-                _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg1, SamplePoint1);
-
-                var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
-                _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg2, SamplePoint2);
+                LoadImages();
             }
         }
 
@@ -182,7 +173,7 @@ namespace MergePics
                 case Keys.Up:
                     if (pb1.Focused)
                     {
-                        SamplePoint1 = ProcessKeyMove(0, -1, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1,out _sampleImg1);
+                        SamplePoint1 = ProcessKeyMove(0, -1, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1);
                         return true;
                     }
                     if (pb2.Focused)
@@ -269,7 +260,7 @@ namespace MergePics
                 action.Invoke(param);
                 Console.WriteLine("123");
             });
-            
+
             timerStarted = curTime;
         }
 
@@ -284,37 +275,71 @@ namespace MergePics
 
             var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
             ProcessReg(sourceImg2, SamplePoint1, SamplePoint2);
+            _currentImgIdx++;
 
+            if (_currentImgIdx < _currentfolderItems)
+            {
+                LoadImages();
+            }
         }
 
         private void ProcessReg(Image<Bgr, byte> inputImage, Point point, Point point1)
         {
-            var offsetWidth = -100;
-            var offsetHeight = -100;
+            var offsetWidth = point.X - point1.X;
+            var offsetHeight = point.Y - point1.Y;
+            var absWidth = Math.Abs(offsetWidth);
+            var absHeight = Math.Abs(offsetHeight);
             //The output image
             Image<Bgr, byte> image = new Image<Bgr, byte>(inputImage.Width, inputImage.Height);
 
-            //Create the roi, with 10 pixels cut off from the right side because of the shift
-            inputImage.ROI = new Rectangle(0, 0, inputImage.Width, inputImage.Height - offsetHeight);
-
-            //The image we want to shift, the same one we created a ROI with, 
-            //has the dimensions 990 X 1000 and the output image has 
-            //dimensions of 1000 x 1000. Unfortunately, in order to paste 
-            //an image onto another image, they need to be the same dimensions. 
-            //How do we do this? We must create an ROI with the output image 
-            //that has the same dimensions as the input image. 
-
-            image.ROI = new Rectangle(0, offsetHeight, image.Width, image.Height);
+            if (offsetWidth >= 0 && offsetHeight >= 0)//Shift towards the bottom right, cut off the bottom right, and leave the top left empty area as original.
+            {
+                inputImage.ROI = new Rectangle(0, 0, inputImage.Width - offsetWidth, inputImage.Height - offsetHeight);
+                image.ROI = new Rectangle(offsetWidth, offsetHeight, image.Width - offsetWidth, image.Height - offsetHeight);
+            }
+            if (offsetWidth >= 0 && offsetHeight < 0)//Shift towards the top right
+            {
+                inputImage.ROI = new Rectangle(0, absHeight, inputImage.Width - absWidth, inputImage.Height - absHeight);
+                image.ROI = new Rectangle(absWidth, 0, image.Width - absWidth, image.Height - absHeight);
+            }
+            if (offsetWidth < 0 && offsetHeight >= 0)//Shift towards the bottom left
+            {
+                inputImage.ROI = new Rectangle(absWidth, 0, inputImage.Width - absWidth, inputImage.Height - absHeight);
+                image.ROI = new Rectangle(0, absHeight, image.Width - absWidth, image.Height - absHeight);
+            }
+            if (offsetWidth < 0 && offsetHeight < 0)//Shift towards the top left
+            {
+                inputImage.ROI = new Rectangle(absWidth, absHeight, inputImage.Width - absWidth, inputImage.Height - absHeight);
+                image.ROI = new Rectangle(0, 0, image.Width - absWidth, image.Height - absHeight);
+            }
 
             //Now we can past the image onto the output because the dimensions match
             inputImage.CopyTo(image);
 
             //Inorder to make our output seem normal, we must empty the ROI of the output image
             image.ROI = Rectangle.Empty;
-            var originalName = Path.GetFileNameWithoutExtension(_loadedFileInfo[fram2Idx].FullName);
-            var path = Path.GetDirectoryName(_loadedFileInfo[fram2Idx].FullName);
-            var filename = string.Format("{0}\\{1}_{2}{3}", path, originalName, _outputFilenameTrailing, _loadedFileInfo[fram2Idx].Extension);
+            var filename = _loadedFileInfo[fram2Idx].FullName;
+         
+                //var originalName = Path.GetFileNameWithoutExtension(_loadedFileInfo[fram2Idx].FullName);
+                //var path = Path.GetDirectoryName(_loadedFileInfo[fram2Idx].FullName);
+                //filename = string.Format("{0}\\{1}_{2}{3}", path, originalName, _outputFilenameTrailing, _loadedFileInfo[fram2Idx].Extension);
+          
             image.Save(filename);
+        }
+
+        private void LoadImages()
+        {
+            var sampleImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
+            ManualRegHelper.LoadPictureBox(pb1, sampleImg1, PictureBoxSizeMode.Zoom, lbP1Idx, fram1Idx, _currentfolderItems);
+
+            var sampleImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
+            ManualRegHelper.LoadPictureBox(pb2, sampleImg, PictureBoxSizeMode.Zoom, lbP2Idx, fram2Idx, _currentfolderItems);
+
+            var sourceImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
+            _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg1, SamplePoint1);
+
+            var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
+            _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg2, SamplePoint2);
         }
     }
 }
