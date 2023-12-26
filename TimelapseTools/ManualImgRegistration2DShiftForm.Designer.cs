@@ -78,6 +78,8 @@
             this.pb2SP1.Size = new System.Drawing.Size(293, 253);
             this.pb2SP1.TabIndex = 2;
             this.pb2SP1.TabStop = false;
+            this.pb2SP1.Click += new System.EventHandler(this.pb2SP1_Click);
+            this.pb2SP1.Paint += new System.Windows.Forms.PaintEventHandler(this.pb2SP1_Paint);
             // 
             // pb1SP1
             // 
@@ -88,6 +90,8 @@
             this.pb1SP1.Size = new System.Drawing.Size(293, 251);
             this.pb1SP1.TabIndex = 2;
             this.pb1SP1.TabStop = false;
+            this.pb1SP1.Click += new System.EventHandler(this.pb1SP1_Click);
+            this.pb1SP1.Paint += new System.Windows.Forms.PaintEventHandler(this.pb1SP1_Paint);
             // 
             // pbMerge
             // 

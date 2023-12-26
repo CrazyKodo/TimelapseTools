@@ -159,8 +159,10 @@ namespace MergePics
             point.X = point.X + xOffset;
             point.Y = point.Y + yOffset;
 
-            var sourceImg = new Image<Bgr, Byte>(imgPath);
-            result = PickSample(pictureBox, samplePB, sourceImg, point);
+            using (var sourceImg = new Image<Bgr, Byte>(imgPath))
+            {
+                result = PickSample(pictureBox, samplePB, sourceImg, point);
+            }
 
             RenderMergeResult();
             return point;
@@ -273,13 +275,17 @@ namespace MergePics
                 return;
             }
 
-            var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
-            ProcessReg(sourceImg2, SamplePoint1, SamplePoint2);
+            using (var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName))
+            {
+                ProcessReg(sourceImg2, SamplePoint1, SamplePoint2);
+            }
+            
             _currentImgIdx++;
 
             if (_currentImgIdx < _currentfolderItems)
             {
                 LoadImages();
+                pb2.Focus();
             }
         }
 
@@ -319,27 +325,69 @@ namespace MergePics
             //Inorder to make our output seem normal, we must empty the ROI of the output image
             image.ROI = Rectangle.Empty;
             var filename = _loadedFileInfo[fram2Idx].FullName;
-         
-                //var originalName = Path.GetFileNameWithoutExtension(_loadedFileInfo[fram2Idx].FullName);
-                //var path = Path.GetDirectoryName(_loadedFileInfo[fram2Idx].FullName);
-                //filename = string.Format("{0}\\{1}_{2}{3}", path, originalName, _outputFilenameTrailing, _loadedFileInfo[fram2Idx].Extension);
-          
+
+            //var originalName = Path.GetFileNameWithoutExtension(_loadedFileInfo[fram2Idx].FullName);
+            //var path = Path.GetDirectoryName(_loadedFileInfo[fram2Idx].FullName);
+            //filename = string.Format("{0}\\{1}_{2}{3}", path, originalName, _outputFilenameTrailing, _loadedFileInfo[fram2Idx].Extension);
+
             image.Save(filename);
         }
 
         private void LoadImages()
         {
-            var sampleImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
-            ManualRegHelper.LoadPictureBox(pb1, sampleImg1, PictureBoxSizeMode.Zoom, lbP1Idx, fram1Idx, _currentfolderItems);
+            using (var sampleImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName))
+            {
+                ManualRegHelper.LoadPictureBox(pb1, sampleImg1, PictureBoxSizeMode.Zoom, lbP1Idx, fram1Idx, _currentfolderItems);
+            }
 
-            var sampleImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
-            ManualRegHelper.LoadPictureBox(pb2, sampleImg, PictureBoxSizeMode.Zoom, lbP2Idx, fram2Idx, _currentfolderItems);
+            using (var sampleImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName))
+            {
+                ManualRegHelper.LoadPictureBox(pb2, sampleImg, PictureBoxSizeMode.Zoom, lbP2Idx, fram2Idx, _currentfolderItems);
+            }
 
-            var sourceImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
-            _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg1, SamplePoint1);
+            using (var sourceImg1 = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName))
+            {
+                _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg1, SamplePoint1);
+            }
 
-            var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
-            _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg2, SamplePoint2);
+            using (var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName))
+            {
+                _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg2, SamplePoint2);
+            }
+        }
+
+        private void pb1SP1_Click(object sender, EventArgs e)
+        {
+            pb1.Focus();
+        }
+
+        private void pb1SP1_Paint(object sender, PaintEventArgs e)
+        {
+            if (pb1.Focused)
+            {
+                ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle,
+                         Color.Red, 2, ButtonBorderStyle.Solid,
+                         Color.Red, 2, ButtonBorderStyle.Solid,
+                         Color.Red, 2, ButtonBorderStyle.Solid,
+                         Color.Red, 2, ButtonBorderStyle.Solid);
+            }
+        }
+
+        private void pb2SP1_Click(object sender, EventArgs e)
+        {
+            pb2.Focus();
+        }
+
+        private void pb2SP1_Paint(object sender, PaintEventArgs e)
+        {
+            if (pb2.Focused)
+            {
+                ControlPaint.DrawBorder(e.Graphics, e.ClipRectangle,
+                         Color.Red, 2, ButtonBorderStyle.Solid,
+                         Color.Red, 2, ButtonBorderStyle.Solid,
+                         Color.Red, 2, ButtonBorderStyle.Solid,
+                         Color.Red, 2, ButtonBorderStyle.Solid);
+            }
         }
     }
 }
