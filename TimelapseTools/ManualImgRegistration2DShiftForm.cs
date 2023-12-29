@@ -279,7 +279,7 @@ namespace MergePics
             {
                 ProcessReg(sourceImg2, SamplePoint1, SamplePoint2);
             }
-            
+
             _currentImgIdx++;
 
             if (_currentImgIdx < _currentfolderItems)
@@ -296,41 +296,42 @@ namespace MergePics
             var absWidth = Math.Abs(offsetWidth);
             var absHeight = Math.Abs(offsetHeight);
             //The output image
-            Image<Bgr, byte> image = new Image<Bgr, byte>(inputImage.Width, inputImage.Height);
-
-            if (offsetWidth >= 0 && offsetHeight >= 0)//Shift towards the bottom right, cut off the bottom right, and leave the top left empty area as original.
+            using (Image<Bgr, byte> image = inputImage.Clone())
             {
-                inputImage.ROI = new Rectangle(0, 0, inputImage.Width - offsetWidth, inputImage.Height - offsetHeight);
-                image.ROI = new Rectangle(offsetWidth, offsetHeight, image.Width - offsetWidth, image.Height - offsetHeight);
-            }
-            if (offsetWidth >= 0 && offsetHeight < 0)//Shift towards the top right
-            {
-                inputImage.ROI = new Rectangle(0, absHeight, inputImage.Width - absWidth, inputImage.Height - absHeight);
-                image.ROI = new Rectangle(absWidth, 0, image.Width - absWidth, image.Height - absHeight);
-            }
-            if (offsetWidth < 0 && offsetHeight >= 0)//Shift towards the bottom left
-            {
-                inputImage.ROI = new Rectangle(absWidth, 0, inputImage.Width - absWidth, inputImage.Height - absHeight);
-                image.ROI = new Rectangle(0, absHeight, image.Width - absWidth, image.Height - absHeight);
-            }
-            if (offsetWidth < 0 && offsetHeight < 0)//Shift towards the top left
-            {
-                inputImage.ROI = new Rectangle(absWidth, absHeight, inputImage.Width - absWidth, inputImage.Height - absHeight);
-                image.ROI = new Rectangle(0, 0, image.Width - absWidth, image.Height - absHeight);
-            }
+                if (offsetWidth >= 0 && offsetHeight >= 0)//Shift towards the bottom right, cut off the bottom right, and leave the top left empty area as original.
+                {
+                    inputImage.ROI = new Rectangle(0, 0, inputImage.Width - offsetWidth, inputImage.Height - offsetHeight);
+                    image.ROI = new Rectangle(offsetWidth, offsetHeight, image.Width - offsetWidth, image.Height - offsetHeight);
+                }
+                if (offsetWidth >= 0 && offsetHeight < 0)//Shift towards the top right
+                {
+                    inputImage.ROI = new Rectangle(0, absHeight, inputImage.Width - absWidth, inputImage.Height - absHeight);
+                    image.ROI = new Rectangle(absWidth, 0, image.Width - absWidth, image.Height - absHeight);
+                }
+                if (offsetWidth < 0 && offsetHeight >= 0)//Shift towards the bottom left
+                {
+                    inputImage.ROI = new Rectangle(absWidth, 0, inputImage.Width - absWidth, inputImage.Height - absHeight);
+                    image.ROI = new Rectangle(0, absHeight, image.Width - absWidth, image.Height - absHeight);
+                }
+                if (offsetWidth < 0 && offsetHeight < 0)//Shift towards the top left
+                {
+                    inputImage.ROI = new Rectangle(absWidth, absHeight, inputImage.Width - absWidth, inputImage.Height - absHeight);
+                    image.ROI = new Rectangle(0, 0, image.Width - absWidth, image.Height - absHeight);
+                }
 
-            //Now we can past the image onto the output because the dimensions match
-            inputImage.CopyTo(image);
+                //Now we can past the image onto the output because the dimensions match
+                inputImage.CopyTo(image);
 
-            //Inorder to make our output seem normal, we must empty the ROI of the output image
-            image.ROI = Rectangle.Empty;
-            var filename = _loadedFileInfo[fram2Idx].FullName;
+                //Inorder to make our output seem normal, we must empty the ROI of the output image
+                image.ROI = Rectangle.Empty;
+                var filename = _loadedFileInfo[fram2Idx].FullName;
 
-            //var originalName = Path.GetFileNameWithoutExtension(_loadedFileInfo[fram2Idx].FullName);
-            //var path = Path.GetDirectoryName(_loadedFileInfo[fram2Idx].FullName);
-            //filename = string.Format("{0}\\{1}_{2}{3}", path, originalName, _outputFilenameTrailing, _loadedFileInfo[fram2Idx].Extension);
+                //var originalName = Path.GetFileNameWithoutExtension(_loadedFileInfo[fram2Idx].FullName);
+                //var path = Path.GetDirectoryName(_loadedFileInfo[fram2Idx].FullName);
+                //filename = string.Format("{0}\\{1}_{2}{3}", path, originalName, _outputFilenameTrailing, _loadedFileInfo[fram2Idx].Extension);
 
-            image.Save(filename);
+                image.Save(filename);
+            }
         }
 
         private void LoadImages()
