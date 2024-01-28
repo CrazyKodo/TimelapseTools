@@ -140,5 +140,8 @@
       <Version>4.7.0.5276</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Todo.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
