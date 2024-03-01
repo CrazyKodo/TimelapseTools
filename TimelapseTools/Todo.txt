@@ -1,2 +1,1 @@
-﻿Move Rotate to ProgressForm
-Add more points/Or change to use point list for GammaCorrect
+﻿Add more points/Or change to use point list for GammaCorrect

@@ -1,27 +1,13 @@
 ﻿using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.Util;
-using Emgu.CV.XObjdetect;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace MergePics
 {
@@ -233,28 +219,15 @@ namespace MergePics
                 options = RotateFlipType.Rotate90FlipNone;
             }
 
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-            ImageCodecInfo jgpEncoder = codecs.First(x => x.FormatID == ImageFormat.Jpeg.Guid);
-            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
-            var myEncoderParameter = new EncoderParameter(myEncoder, 100L);
-            myEncoderParameters.Param[0] = myEncoderParameter;
-
-            DirectoryInfo d = new DirectoryInfo(_sourcePath);
-            FileInfo[] infos = d.GetFiles();
-
-            foreach (FileInfo f in infos)
+            if (_progressForm == null)
             {
-                var fileFullName = $"{_outputPath}\\{f.Name}";
-                using (Image img = Image.FromFile(f.FullName))
-                {
-                    //rotate the picture by 90 degrees and re-save the picture as a Jpeg
-                    img.RotateFlip(options);
-                    img.Save(fileFullName, jgpEncoder, myEncoderParameters);
-                }
+                // Start the asynchronous operation.                
+                _progressForm = new ProgressForm();
+                _progressForm.ProcessRotate(_sourcePath, _outputPath, options);
+                _progressForm.StartPosition = FormStartPosition.CenterParent;
+                _progressForm.ShowDialog();
             }
-
-            System.Windows.Forms.MessageBox.Show("Done", "Message");
+            _progressForm = null;
         }
 
 

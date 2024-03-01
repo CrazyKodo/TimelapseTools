@@ -80,6 +80,7 @@
     <Compile Include="Helpers\ManualRegHelper.cs" />
     <Compile Include="Helpers\MidFrameHelper.cs" />
     <Compile Include="Helpers\Helper.cs" />
+    <Compile Include="Helpers\RotateHelper.cs" />
     <Compile Include="ManualImgRegistration2DShiftForm.cs">
       <SubType>Form</SubType>
     </Compile>

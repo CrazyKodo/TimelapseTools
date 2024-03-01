@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MergePics
@@ -46,6 +49,17 @@ namespace MergePics
             backgroundWorker1.RunWorkerAsync();
         }
 
+        public void ProcessRotate(string sourcePath, string outputPath, RotateFlipType rotateFlipType)
+        {
+            BackgroundWorker backgroundWorker1 = new BackgroundWorker();
+            backgroundWorker1.WorkerReportsProgress = true;
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker1.ProgressChanged += (obj, e) => backgroundWorker1_ProgressChanged(obj, e);
+            backgroundWorker1.RunWorkerCompleted += (obj, e) => backgroundWorker1_RunWorkerCompleted(obj, e);
+            backgroundWorker1.DoWork += (obj, e) => Rotate(obj, e, rotateFlipType, sourcePath, outputPath);
+            backgroundWorker1.RunWorkerAsync();
+        }
+
         private void GammaCorrection(object obj, DoWorkEventArgs e, string sourcePath, string outputPath, string gammaCorrectionSampleFile, bool replace, int threshold, int size, List<Point> points)
         {
             BackgroundWorker worker = obj as BackgroundWorker;
@@ -62,6 +76,12 @@ namespace MergePics
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             RenameHelper.Rename(renameType, sourcePath, outputPath, replace, worker);
+        }
+
+        private void Rotate(object sender, DoWorkEventArgs e, RotateFlipType rotateFlipType, string sourcePath, string outputPath)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            RotateHelper.Rotate(rotateFlipType, sourcePath, outputPath, worker);
         }
 
         // This event handler updates the progress.
