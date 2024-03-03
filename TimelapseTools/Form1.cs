@@ -1,10 +1,12 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using MergePics.Models;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -22,18 +24,10 @@ namespace MergePics
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
 
-        private const string _gammaCorrectionSampleFileSettingKey = "GammaCorrectionSampleFile";
         private const string _sourcePathSettingKey = "SourcePath";
         private const string _outputPathSettingKey = "OutputPath";
-        private const string _samplePoint1XSettingKey = "SP1x";
-        private const string _samplePoint1YSettingKey = "SP1y";
-        private const string _samplePoint2XSettingKey = "SP2x";
-        private const string _samplePoint2YSettingKey = "SP2y";
-        private const string _samplePoint3XSettingKey = "SP3x";
-        private const string _samplePoint3YSettingKey = "SP3y";
-        private const string _samplePoint4XSettingKey = "SP4x";
-        private const string _samplePoint4YSettingKey = "SP4y";
         private const string _sequenceFolderPathSettingKey = "SequenceFolderPath";
+        private const string _samplePointsListBoxItemFormat = "x:{0} y:{1}";
 
         private string _sourcePath;
         private string _outputPath;
@@ -43,6 +37,7 @@ namespace MergePics
 
         private ProgressForm _progressForm;
         private ManualImgRegistration2DShiftForm _manualImgRegistrationForm;
+        private GammaCorrectSettingsModel _gammaCorrectSettingsModel = new GammaCorrectSettingsModel();
 
         public Form1()
         {
@@ -55,18 +50,26 @@ namespace MergePics
             cbRotateOptions.DataSource = rotateOptions;
             cbRotateOptions.SelectedIndex = Array.FindIndex(rotateOptions, x => x == "Rotate90FlipNone");
 
-            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_gammaCorrectionSampleFileSettingKey]))
+            if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[Helper.GammaCorrectionSettingsSettingKey]))
             {
                 try
                 {
-                    var path = ConfigurationManager.AppSettings[_gammaCorrectionSampleFileSettingKey];
-                    if (!string.IsNullOrWhiteSpace(path))
+                    var settings = ConfigurationManager.AppSettings[Helper.GammaCorrectionSettingsSettingKey];
+                    _gammaCorrectSettingsModel = JsonConvert.DeserializeObject<GammaCorrectSettingsModel>(settings);
+                    if (!string.IsNullOrWhiteSpace(_gammaCorrectSettingsModel.SampleFilePath))
                     {
-                        string text = File.ReadAllText(path);
-                        _gammaCorrectionSampleFile = path;
+                        string text = File.ReadAllText(_gammaCorrectSettingsModel.SampleFilePath);
+                        _gammaCorrectionSampleFile = _gammaCorrectSettingsModel.SampleFilePath;
                         _gammaCorrectionSampleFileSize = text.Length;
                         lbGammaCorrectionSample.Text = _gammaCorrectionSampleFile;
                     }
+
+                    this.tbSampleSize.Text = _gammaCorrectSettingsModel.SampleSizePX.ToString();
+                    this.tbSamplePointsCount.Text = _gammaCorrectSettingsModel.SamplePointsCount.ToString();
+
+                    _gammaCorrectSettingsModel.SamplePoints.ForEach(x =>
+                      this.lbSamplePoints.Items.Add(string.Format(_samplePointsListBoxItemFormat, x.X.ToString(), x.Y.ToString()))
+                      );
                 }
                 catch (Exception)
                 {
@@ -90,30 +93,6 @@ namespace MergePics
             {
                 _outputPath = ConfigurationManager.AppSettings[_outputPathSettingKey];
                 this.labelOutputfolderPath.Text = $": {_outputPath}";
-            }
-
-            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint1XSettingKey], out int xPoint1) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint1YSettingKey], out int yPoint1))
-            {
-                this.tbSP1x.Text = xPoint1.ToString();
-                this.tbSP1y.Text = yPoint1.ToString();
-            }
-
-            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint2XSettingKey], out int xPoint2) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint2YSettingKey], out int yPoint2))
-            {
-                this.tbSP2x.Text = xPoint2.ToString();
-                this.tbSP2y.Text = yPoint2.ToString();
-            }
-
-            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint3XSettingKey], out int xPoint3) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint3YSettingKey], out int yPoint3))
-            {
-                this.tbSP3x.Text = xPoint3.ToString();
-                this.tbSP3y.Text = yPoint3.ToString();
-            }
-
-            if (int.TryParse(ConfigurationManager.AppSettings[_samplePoint4XSettingKey], out int xPoint4) && int.TryParse(ConfigurationManager.AppSettings[_samplePoint4YSettingKey], out int yPoint4))
-            {
-                this.tbSP4x.Text = xPoint4.ToString();
-                this.tbSP4y.Text = yPoint4.ToString();
             }
 
             if (!string.IsNullOrWhiteSpace(ConfigurationManager.AppSettings[_sequenceFolderPathSettingKey]))
@@ -267,7 +246,7 @@ namespace MergePics
                 return;
             }
 
-            if (!int.TryParse(tbSP1y.Text, out int _) || !int.TryParse(tbSP1x.Text, out int _))
+            if (!_gammaCorrectSettingsModel.SamplePoints.Any())
             {
                 System.Windows.Forms.MessageBox.Show("Set at leaset one sample point", "Message");
                 return;
@@ -291,29 +270,11 @@ namespace MergePics
                 return;
             }
 
-            List<Point> points = new List<Point>();
-            if (int.TryParse(tbSP1y.Text, out int sp1y) && int.TryParse(tbSP1x.Text, out int sp1x))
-            {
-                points.Add(new Point(sp1x, sp1y));
-            }
-            if (int.TryParse(tbSP2y.Text, out int sp2y) && int.TryParse(tbSP2x.Text, out int sp2x))
-            {
-                points.Add(new Point(sp2x, sp2y));
-            }
-            if (int.TryParse(tbSP3y.Text, out int sp3y) && int.TryParse(tbSP3x.Text, out int sp3x))
-            {
-                points.Add(new Point(sp3x, sp3y));
-            }
-            if (int.TryParse(tbSP4y.Text, out int sp4y) && int.TryParse(tbSP4x.Text, out int sp4x))
-            {
-                points.Add(new Point(sp4x, sp4y));
-            }
-
             if (_progressForm == null)
             {
                 // Start the asynchronous operation.                
                 _progressForm = new ProgressForm();
-                _progressForm.ProcessGammaCorrection(_sourcePath, _outputPath, _gammaCorrectionSampleFile, cbMidFrameReplace.Checked, threshold, spSize, points);
+                _progressForm.ProcessGammaCorrection(_sourcePath, _outputPath, _gammaCorrectionSampleFile, cbMidFrameReplace.Checked, threshold, spSize, _gammaCorrectSettingsModel.SamplePoints);
                 _progressForm.StartPosition = FormStartPosition.CenterParent;
                 _progressForm.ShowDialog();
             }
@@ -327,13 +288,13 @@ namespace MergePics
             if (result == DialogResult.OK) // Test result.
             {
                 _gammaCorrectionSampleFile = openFileDialog1.FileName;
+                _gammaCorrectSettingsModel.SampleFilePath = openFileDialog1.FileName;
                 try
                 {
                     string text = File.ReadAllText(_gammaCorrectionSampleFile);
                     _gammaCorrectionSampleFileSize = text.Length;
                     lbGammaCorrectionSample.Text = _gammaCorrectionSampleFile;
-
-                    Helper.SaveAppSettings(_gammaCorrectionSampleFileSettingKey, _gammaCorrectionSampleFile);
+                    Helper.SaveAppSettings(_gammaCorrectSettingsModel);
                 }
                 catch (IOException)
                 {
@@ -349,9 +310,9 @@ namespace MergePics
                 return;
             }
 
-            if (!int.TryParse(tbSP1y.Text, out int _) || !int.TryParse(tbSP1x.Text, out int _))
+            if (_gammaCorrectSettingsModel.SamplePointsCount < 1)
             {
-                System.Windows.Forms.MessageBox.Show("Set at leaset one sample point", "Message");
+                System.Windows.Forms.MessageBox.Show("Set the number of sample point", "Message");
                 return;
             }
 
@@ -364,27 +325,9 @@ namespace MergePics
             Image<Bgr, Byte> sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile);
             try
             {
-                List<Point> points = new List<Point>();
-                if (int.TryParse(tbSP1y.Text, out int sp1y) && int.TryParse(tbSP1x.Text, out int sp1x))
-                {
-                    points.Add(new Point(sp1x, sp1y));
-                }
-                if (int.TryParse(tbSP2y.Text, out int sp2y) && int.TryParse(tbSP2x.Text, out int sp2x))
-                {
-                    points.Add(new Point(sp2x, sp2y));
-                }
-                if (int.TryParse(tbSP3y.Text, out int sp3y) && int.TryParse(tbSP3x.Text, out int sp3x))
-                {
-                    points.Add(new Point(sp3x, sp3y));
-                }
-                if (int.TryParse(tbSP4y.Text, out int sp4y) && int.TryParse(tbSP4x.Text, out int sp4x))
-                {
-                    points.Add(new Point(sp4x, sp4y));
-                }
-
                 using (Form form = new Form())
                 {
-                    GammaCorrectHelper.DrawSampleAreas(sampleImg, Convert.ToInt32(tbSampleSize.Text), points);
+                    GammaCorrectHelper.DrawSampleAreas(sampleImg, Convert.ToInt32(tbSampleSize.Text), _gammaCorrectSettingsModel.SamplePoints);
                     Panel panel = new Panel();
                     var lbMousePosition = new System.Windows.Forms.Label();
                     panel.Controls.Add(lbMousePosition);
@@ -410,32 +353,22 @@ namespace MergePics
                     pb.MouseClick += (object mcsender, MouseEventArgs ee) =>
                     {
                         var posPB = pb.PointToClient(Cursor.Position);
-                        var tbSPx = tbSP1x;
-                        var tbSPy = tbSP1y;
-                        switch (clickFlag)
+                        if (_gammaCorrectSettingsModel.SamplePoints.Count() > clickFlag)
                         {
-                            case 0:
-                                tbSPx = tbSP1x; tbSPy = tbSP1y; break;
-                            case 1:
-                                tbSPx = tbSP2x; tbSPy = tbSP2y; break;
-                            case 2:
-                                tbSPx = tbSP3x; tbSPy = tbSP3y; break;
-                            case 3:
-                                tbSPx = tbSP4x; tbSPy = tbSP4y; break;
-                            default:
-                                tbSPx = tbSP1x; tbSPy = tbSP1y; break;
+                            _gammaCorrectSettingsModel.SamplePoints.RemoveAt(clickFlag);
                         }
-                        tbSPx.Text = posPB.X.ToString();
-                        tbSPy.Text = posPB.Y.ToString();
-                        points.RemoveAt(clickFlag);
-                        points.Insert(clickFlag, new Point(posPB.X, posPB.Y));
+                        _gammaCorrectSettingsModel.SamplePoints.Insert(clickFlag, new Point(posPB.X, posPB.Y));
                         sampleImg.Dispose();
                         sampleImg = null;
                         sampleImg = new Image<Bgr, Byte>(_gammaCorrectionSampleFile);
-                        GammaCorrectHelper.DrawSampleAreas(sampleImg, Convert.ToInt32(tbSampleSize.Text), points);
+                        GammaCorrectHelper.DrawSampleAreas(sampleImg, Convert.ToInt32(tbSampleSize.Text), _gammaCorrectSettingsModel.SamplePoints);
                         pb.Image = Emgu.CV.BitmapExtension.ToBitmap(sampleImg.Mat);
 
-                        clickFlag = clickFlag > 2 ? 0 : clickFlag + 1;
+                        clickFlag = clickFlag >= _gammaCorrectSettingsModel.SamplePointsCount - 1 ? 0 : clickFlag + 1;
+                        Helper.SaveAppSettings(_gammaCorrectSettingsModel);
+
+                        this.lbSamplePoints.Items.Clear();
+                        _gammaCorrectSettingsModel.SamplePoints.ForEach(x => this.lbSamplePoints.Items.Add(string.Format(_samplePointsListBoxItemFormat, x.X.ToString(), x.Y.ToString())));
                     };
 
                     pb.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -447,70 +380,6 @@ namespace MergePics
             finally
             {
                 sampleImg.Dispose();
-            }
-        }
-
-        private void tbSP1x_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP1x.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint1XSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP1y_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP1y.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint1YSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP2x_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP2x.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint2XSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP2y_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP2y.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint2YSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP3x_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP3x.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint3XSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP3y_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP3y.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint3YSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP4x_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP4x.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint4XSettingKey, re.ToString());
-            }
-        }
-
-        private void tbSP4y_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(tbSP4y.Text, out int re))
-            {
-                Helper.SaveAppSettings(_samplePoint4YSettingKey, re.ToString());
             }
         }
 
@@ -552,6 +421,24 @@ namespace MergePics
 
             this.lbSequenceFolderPath.Text = "Select a folder first";
             _sequenceFolderPath = string.Empty;
+        }
+
+        private void tbSampleSize_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.tbSampleSize.Text, out int re))
+            {
+                _gammaCorrectSettingsModel.SampleSizePX = re;
+                Helper.SaveAppSettings(_gammaCorrectSettingsModel);
+            }
+        }
+
+        private void tbSamplePointsCount_TextChanged(object sender, EventArgs e)
+        {
+            if (int.TryParse(this.tbSamplePointsCount.Text, out int re))
+            {
+                _gammaCorrectSettingsModel.SamplePointsCount = re;
+                Helper.SaveAppSettings(_gammaCorrectSettingsModel);
+            }
         }
     }
 }

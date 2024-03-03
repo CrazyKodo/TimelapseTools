@@ -87,7 +87,8 @@
     <Compile Include="ManualImgRegistration2DShiftForm.Designer.cs">
       <DependentUpon>ManualImgRegistration2DShiftForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProcessResult.cs" />
+    <Compile Include="Models\GammaCorrectSettingsModel.cs" />
+    <Compile Include="Models\ProcessResult.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgressForm.cs">
       <SubType>Form</SubType>
@@ -139,6 +140,9 @@
     </PackageReference>
     <PackageReference Include="Emgu.CV.UI">
       <Version>4.7.0.5276</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

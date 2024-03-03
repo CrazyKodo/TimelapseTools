@@ -1,1 +1,1 @@
-﻿Add more points/Or change to use point list for GammaCorrect
+﻿Some update on ManualImgRegistration ?

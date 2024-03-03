@@ -1,5 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
+using MergePics.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,6 +16,7 @@ namespace MergePics
 {
     internal static class Helper
     {
+        public const string GammaCorrectionSettingsSettingKey = "GammaCorrectionSettings";
         public static void SaveAppSettings(string key, string value)
         {
             try
@@ -26,6 +29,12 @@ namespace MergePics
             catch (Exception)
             {
             }
+        }
+
+        public static void SaveAppSettings(GammaCorrectSettingsModel model)
+        {
+            var settings = JsonConvert.SerializeObject(model);
+            SaveAppSettings(GammaCorrectionSettingsSettingKey, settings);
         }
 
         public static void TryCopy(string sourceFileName, string destFileName, bool replace)
