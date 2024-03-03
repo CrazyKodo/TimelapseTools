@@ -122,10 +122,12 @@ namespace MergePics
             var unScaledPoint = ManualRegHelper.GetActualPoint(pb1, point);
             SamplePoint1 = unScaledPoint;
 
-            var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName);
-            _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg, unScaledPoint);
-            pb1.Focus();
-            RenderMergeResult();
+            using (var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram1Idx].FullName))
+            {
+                _sampleImg1 = PickSample(pb1, pb1SP1, sourceImg, unScaledPoint);
+                pb1.Focus();
+                RenderMergeResult();
+            }
         }
 
         private void pb2_Click(object sender, EventArgs e)
@@ -134,10 +136,12 @@ namespace MergePics
             var unScaledPoint = ManualRegHelper.GetActualPoint(pb1, point);
             SamplePoint2 = unScaledPoint;
 
-            var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName);
-            _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg, unScaledPoint);
-            pb2.Focus();
-            RenderMergeResult();
+            using (var sourceImg = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName))
+            {
+                _sampleImg2 = PickSample(pb2, pb2SP1, sourceImg, unScaledPoint);
+                pb2.Focus();
+                RenderMergeResult();
+            }
         }
 
         private Image<Bgr, Byte> PickSample(PictureBox pictureBox, PictureBox samplePB, Image<Bgr, Byte> image, Point point)
@@ -175,12 +179,12 @@ namespace MergePics
                 case Keys.Up:
                     if (pb1.Focused)
                     {
-                        SamplePoint1 = ProcessKeyMove(0, -1, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1);
+                        Throttle(500, _ => SamplePoint1 = ProcessKeyMove(0, -1, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1));
                         return true;
                     }
                     if (pb2.Focused)
                     {
-                        SamplePoint2 = ProcessKeyMove(0, -1, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2);
+                        Throttle(500, _ => SamplePoint2 = ProcessKeyMove(0, -1, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2));
                         return true;
                     }
 
@@ -189,12 +193,12 @@ namespace MergePics
                 case Keys.Down:
                     if (pb1.Focused)
                     {
-                        SamplePoint1 = ProcessKeyMove(0, 1, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1);
+                        Throttle(500, _ => SamplePoint1 = ProcessKeyMove(0, 1, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1));
                         return true;
                     }
                     if (pb2.Focused)
                     {
-                        SamplePoint2 = ProcessKeyMove(0, 1, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2);
+                        Throttle(500, _ => SamplePoint2 = ProcessKeyMove(0, 1, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2));
                         return true;
                     }
 
@@ -203,12 +207,12 @@ namespace MergePics
                 case Keys.Left:
                     if (pb1.Focused)
                     {
-                        SamplePoint1 = ProcessKeyMove(-1, 0, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1);
+                        Throttle(500, _ => SamplePoint1 = ProcessKeyMove(-1, 0, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1));
                         return true;
                     }
                     if (pb2.Focused)
                     {
-                        SamplePoint2 = ProcessKeyMove(-1, 0, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2);
+                        Throttle(500, _ => SamplePoint2 = ProcessKeyMove(-1, 0, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2));
                         return true;
                     }
 
@@ -217,12 +221,12 @@ namespace MergePics
                 case Keys.Right:
                     if (pb1.Focused)
                     {
-                        SamplePoint1 = ProcessKeyMove(1, 0, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1);
+                        Throttle(500, _ => SamplePoint1 = ProcessKeyMove(1, 0, SamplePoint1, _loadedFileInfo[fram1Idx].FullName, pb1, pb1SP1, out _sampleImg1));
                         return true;
                     }
                     if (pb2.Focused)
                     {
-                        SamplePoint2 = ProcessKeyMove(1, 0, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2);
+                        Throttle(500, _ => SamplePoint2 = ProcessKeyMove(1, 0, SamplePoint2, _loadedFileInfo[fram2Idx].FullName, pb2, pb2SP1, out _sampleImg2));
                         return true;
                     }
 
@@ -285,6 +289,7 @@ namespace MergePics
             if (_currentImgIdx < _currentfolderItems)
             {
                 LoadImages();
+                RenderMergeResult();
                 pb2.Focus();
             }
         }
