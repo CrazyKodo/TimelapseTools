@@ -149,11 +149,11 @@
             // 
             // button1
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(394, 824);
+            this.button1.Location = new System.Drawing.Point(3, 820);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(150, 30);
+            this.button1.Size = new System.Drawing.Size(933, 38);
             this.button1.TabIndex = 3;
             this.button1.Text = "Save and next";
             this.button1.UseVisualStyleBackColor = true;
