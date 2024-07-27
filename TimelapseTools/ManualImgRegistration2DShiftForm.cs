@@ -264,7 +264,7 @@ namespace MergePics
             {
                 await Task.Delay(interval, cts.Token);
                 action.Invoke(param);
-                Console.WriteLine("123");
+                Console.WriteLine("Throttle");
             });
 
             timerStarted = curTime;
