@@ -32,6 +32,11 @@ namespace MergePics
         public static Image<Bgr, Byte> GetSampleAreaImg(Image<Bgr, Byte> image, int width, int height, Point point)
         {
             var imagepart = image.Copy();
+            if (point.Y>image.Height || point.X>image.Width)
+            {
+                return imagepart;
+            }
+
             var x = (point.X - width / 2) > 0 ? point.X - width / 2 : 0;
             var y = (point.Y - height / 2) > 0 ? point.Y - height / 2 : 0;
             var roi = new Rectangle(point.X - width / 2, point.Y - height / 2, width, height);

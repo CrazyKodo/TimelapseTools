@@ -279,6 +279,12 @@ namespace MergePics
                 return;
             }
 
+            if (fram2Idx >= _loadedFileInfo.Length)
+            {
+                System.Windows.Forms.MessageBox.Show("Reached end of array.", "Warning");
+                return;
+            }
+
             using (var sourceImg2 = new Image<Bgr, Byte>(_loadedFileInfo[fram2Idx].FullName))
             {
                 ProcessReg(sourceImg2, SamplePoint1, SamplePoint2);
