@@ -32,7 +32,7 @@ namespace MergePics
         public static Image<Bgr, Byte> GetSampleAreaImg(Image<Bgr, Byte> image, int width, int height, Point point)
         {
             var imagepart = image.Copy();
-            if (point.Y>image.Height || point.X>image.Width)
+            if (point.Y >=0 || point.X >= 0 || point.Y>image.Height || point.X>image.Width)
             {
                 return imagepart;
             }
